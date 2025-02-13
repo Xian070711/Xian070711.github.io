@@ -14,8 +14,8 @@
     <div id="gallery" class="gallery"></div>
 
     <script>
-        const API_KEY = "你的 API 金鑰"; // 這裡換成你的 API 金鑰
-        const FOLDER_ID = "你的資料夾 ID"; // 這裡換成你的 Google Drive 資料夾 ID
+        const API_KEY = "AIzaSyBwAoMx7gpTlOZTatw9Fvjc_komNqamsaQ"; // 這裡換成你的 API 金鑰
+        const FOLDER_ID = "1XegykdKg8-_slT6fe-g0dbQ0M_sPdpfL"; // 這裡換成你的 Google Drive 資料夾 ID
 
         async function loadPhotos() {
             const url = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents&key=${API_KEY}&fields=files(id,name,mimeType)`;
