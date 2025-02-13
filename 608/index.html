@@ -1,9 +1,42 @@
-<html>
-  <head></head>
-  <body>
-    <h1>https://drive.google.com/drive/my-drive?dmr=1&ec=wgc-drive-globalnav-goto</h1>
-    <div id="gallery"></div>
-    <img src="https://drive.google.com/file/d/1ANsEZOMqpkU623w0TXCURR6VjeprnnCc/view?usp=drive_link" />
-    AIzaSyAcgARDEqLfqL25LN1m--pVvVMgsqfzzmI
-  </body>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>畢業紀念冊</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        .gallery img { width: 150px; height: 150px; margin: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>畢業紀念冊</h1>
+    <div id="gallery" class="gallery"></div>
+
+    <script>
+        const API_KEY = "你的 API 金鑰"; // 這裡換成你的 API 金鑰
+        const FOLDER_ID = "你的資料夾 ID"; // 這裡換成你的 Google Drive 資料夾 ID
+
+        async function loadPhotos() {
+            const url = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents&key=${API_KEY}&fields=files(id,name,mimeType)`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            const gallery = document.getElementById("gallery");
+            gallery.innerHTML = "";
+
+            data.files.forEach(file => {
+                if (file.mimeType.startsWith("image/")) {
+                    const imgUrl = `https://drive.google.com/uc?id=${file.id}`;
+                    const img = document.createElement("img");
+                    img.src = imgUrl;
+                    img.onclick = () => window.open(imgUrl, "_blank");
+                    gallery.appendChild(img);
+                }
+            });
+        }
+
+        loadPhotos();
+    </script>
+</body>
 </html>
