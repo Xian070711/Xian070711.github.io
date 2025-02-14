@@ -3,11 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>顯示 Google Drive 圖片</title>
+    <title>Google Drive API 顯示圖片</title>
 </head>
 <body>
 
     <h1>我的 Google Drive 照片</h1>
-    <img src="https://drive.google.com/uc?export=view&id=1vjIV9LM4XR0cBdrPa9mkxYvXGvUMBh2k" width="300">
+    <img id="image" width="300">
+
+    <script>
+        const apiKey = "AIzaSyAcgARDEqLfqL25LN1m--pVvVMgsqfzzmI";  // 🔹 請替換成你的 API Key
+        const fileId = "1vjIV9LM4XR0cBdrPa9mkxYvXGvUMBh2k";    // 🔹 請替換成你的圖片 ID
+
+        async function fetchImage() {
+            const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${apiKey}`;
+            document.getElementById("image").src = url;
+        }
+
+        fetchImage();
+    </script>
+
 </body>
 </html>
