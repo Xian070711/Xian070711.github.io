@@ -15,7 +15,7 @@
 
     <script>
         const apiKey = "AIzaSyAcgARDEqLfqL25LN1m--pVvVMgsqfzzmI";  // 🔹 請替換成你的 API Key
-        const folderId = "https://drive.google.com/drive/folders/1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA?usp=drive_link";  // 🔹 請替換成你的資料夾 ID
+        const folderId = "1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA";  // 🔹 請替換成你的資料夾 ID
 
         async function fetchImages() {
             const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${apiKey}&fields=files(id,name,mimeType)`;
