@@ -3,23 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Drive API 顯示圖片</title>
+    <title>Google Drive API 顯示資料夾圖片</title>
+    <style>
+        #gallery img { width: 150px; margin: 10px; border-radius: 10px; }
+    </style>
 </head>
 <body>
 
-    <h1>我的 Google Drive 照片</h1>
-    <img id="image" width="300">
+    <h1>Google Drive 照片展示</h1>
+    <div id="gallery"></div>
 
     <script>
         const apiKey = "AIzaSyAcgARDEqLfqL25LN1m--pVvVMgsqfzzmI";  // 🔹 請替換成你的 API Key
-        const fileId = "1vjIV9LM4XR0cBdrPa9mkxYvXGvUMBh2k";    // 🔹 請替換成你的圖片 ID
+        const folderId = "1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA";  // 🔹 請替換成你的資料夾 ID https://drive.google.com/drive/folders/1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA?usp=sharing
 
-        async function fetchImage() {
-            const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${apiKey}`;
-            document.getElementById("image").src = url;
+        async function fetchImages() {
+            const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${apiKey}&fields=files(id,name,mimeType)`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            const gallery = document.getElementById("gallery");
+            gallery.innerHTML = ""; // 清空畫面
+
+            data.files.forEach(file => {
+                if (file.mimeType.startsWith("image/")) {
+                    const imgUrl = `https://drive.google.com/uc?export=view&id=${file.id}`;
+                    const imgElement = `<img src="${imgUrl}" alt="${file.name}">`;
+                    gallery.innerHTML += imgElement;
+                }
+            });
         }
 
-        fetchImage();
+        fetchImages();
     </script>
 
 </body>
