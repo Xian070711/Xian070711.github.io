@@ -14,24 +14,28 @@
     <div id="gallery"></div>
 
     <script>
-        const apiKey = "AIzaSyAcgARDEqLfqL25LN1m--pVvVMgsqfzzmI";  // 🔹 請替換成你的 API Key
-        const folderId = "1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA";  // 🔹 請替換成你的資料夾 ID https://drive.google.com/drive/folders/1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA?usp=sharing
+        const apiKey = "AIzaSyAcgARDEqLfqL25LN1m--pVvVMgsqfzzmI";  // 請替換成你的 API Key
+        const folderId = "https://drive.google.com/drive/folders/1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA?usp=drive_link";  // 請替換成你的資料夾 ID
 
         async function fetchImages() {
-            const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${apiKey}&fields=files(id,name,mimeType)`;
+            const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${apiKey}&fields=files(id,name,mimeType,webContentLink)`;
             const response = await fetch(url);
             const data = await response.json();
 
             const gallery = document.getElementById("gallery");
             gallery.innerHTML = ""; // 清空畫面
 
-            data.files.forEach(file => {
-                if (file.mimeType.startsWith("image/")) {
-                    const imgUrl = `https://drive.google.com/uc?export=view&id=${file.id}`;
-                    const imgElement = `<img src="${imgUrl}" alt="${file.name}">`;
-                    gallery.innerHTML += imgElement;
-                }
-            });
+            if (data.files && data.files.length > 0) {
+                data.files.forEach(file => {
+                    if (file.mimeType.startsWith("image/")) {
+                        const imgUrl = file.webContentLink; // 這樣可以確保 API 正確返回可讀取的圖片 URL
+                        const imgElement = `<img src="${imgUrl}" alt="${file.name}">`;
+                        gallery.innerHTML += imgElement;
+                    }
+                });
+            } else {
+                gallery.innerHTML = "<p>找不到圖片，請確認資料夾 ID 或權限！</p>";
+            }
         }
 
         fetchImages();
