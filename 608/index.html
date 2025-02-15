@@ -46,10 +46,17 @@
 
         // 動態生成圖片
         photoIDs.forEach(id => {
+            const link = document.createElement("a");
+            link.href = `https://drive.google.com/uc?export=view&id=${id}`; // 完整圖片連結
+            link.target = "_blank";  // 在新視窗中打開
+
             const img = document.createElement("img");
-            img.src = `https://drive.google.com/thumbnail?id=${id}`;
+            img.src = `https://drive.google.com/thumbnail?id=${id}`; // 縮略圖
             img.alt = "畢業照";
-            gallery.appendChild(img);
+
+            // 將圖片放到連結裡
+            link.appendChild(img);
+            gallery.appendChild(link);
         });
     </script>
 </body>
