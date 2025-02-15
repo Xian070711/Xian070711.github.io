@@ -3,60 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Drive 相簿</title>
-    <script>
-        // 你的 API 金鑰
-        const API_KEY = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0";
-        // 你的 Google Drive 資料夾 ID
-        const FOLDER_ID = "1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA";
-        
-        // Google Drive API 查詢 URL
-        const API_URL = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents+and+mimeType contains 'image'&key=${API_KEY}&fields=files(id,name)`;
-
-        async function loadImages() {
-            try {
-                const response = await fetch(API_URL);
-                const data = await response.json();
-
-                const gallery = document.getElementById("photoGallery");
-                gallery.innerHTML = ""; // 清空舊內容
-
-                if (!data.files || data.files.length === 0) {
-                    gallery.innerHTML = "<p>找不到圖片，請檢查資料夾權限！</p>";
-                    return;
-                }
-
-                data.files.forEach(file => {
-                    const imgContainer = document.createElement("div");
-                    imgContainer.style.display = "inline-block";
-                    imgContainer.style.margin = "10px";
-
-                    const img = document.createElement("img");
-                    img.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w400`; // 縮圖
-                    img.alt = file.name;
-                    img.style.width = "200px";
-                    img.style.height = "200px";
-                    img.style.objectFit = "cover";
-                    img.style.borderRadius = "10px";
-                    img.style.cursor = "pointer";
-
-                    // 點擊圖片放大
-                    img.onclick = function() {
-                        document.getElementById("modal").style.display = "flex";
-                        document.getElementById("modalImage").src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w1000`; // 大圖
-                    };
-
-                    imgContainer.appendChild(img);
-                    gallery.appendChild(imgContainer);
-                });
-            } catch (error) {
-                console.error("發生錯誤:", error);
-                document.getElementById("photoGallery").innerHTML = "<p>載入圖片時發生錯誤，請檢查 API 金鑰！</p>";
-            }
-        }
-
-        window.onload = loadImages;
-    </script>
+    <title>畢業紀念冊</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -65,8 +12,19 @@
         .gallery {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
             justify-content: center;
+            gap: 10px;
+        }
+        .gallery img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
+        .gallery img:hover {
+            transform: scale(1.1);
         }
         .modal {
             display: none;
@@ -75,23 +33,80 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.8);
             justify-content: center;
             align-items: center;
         }
         .modal img {
             max-width: 90%;
             max-height: 90%;
+            border-radius: 8px;
+        }
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <h1>Google Drive 相簿</h1>
+
+    <h1>畢業紀念冊</h1>
     <div class="gallery" id="photoGallery"></div>
 
-    <!-- 放大圖片的 Modal -->
-    <div id="modal" class="modal" onclick="this.style.display='none'">
+    <!-- 放大顯示圖片 -->
+    <div class="modal" id="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
         <img id="modalImage">
     </div>
+
+    <script>
+        const API_KEY = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0"; // 請填入你的 API 金鑰
+        const FOLDER_ID = "1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA"; // 替換成你的資料夾 ID
+        const gallery = document.getElementById("photoGallery");
+        const modal = document.getElementById("modal");
+        const modalImage = document.getElementById("modalImage");
+
+        async function loadImages() {
+            const API_URL = `https://www.googleapis.com/drive/v3/files?q=%27${FOLDER_ID}%27+in+parents+and+mimeType+contains+%27image%27&key=${API_KEY}&fields=files(id,name)`;
+
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+                const data = await response.json();
+                gallery.innerHTML = ""; // 清空畫面
+
+                if (!data.files || data.files.length === 0) {
+                    gallery.innerHTML = "<p>沒有找到圖片，請確認資料夾權限</p>";
+                    return;
+                }
+
+                data.files.forEach((file) => {
+                    const img = document.createElement("img");
+                    img.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w300`; // 載入縮圖
+                    img.alt = file.name;
+                    img.onclick = function () {
+                        modal.style.display = "flex";
+                        modalImage.src = `https://drive.google.com/uc?id=${file.id}`; // 顯示完整圖片
+                    };
+                    gallery.appendChild(img);
+                });
+            } catch (error) {
+                console.error("圖片載入錯誤：", error);
+                gallery.innerHTML = "<p>發生錯誤，請檢查 API 金鑰與資料夾權限</p>";
+            }
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        loadImages();
+    </script>
+
 </body>
 </html>
