@@ -104,31 +104,36 @@
             left: 20px;
             background-color: transparent;
             border: none;
-            font-size: 30px;
-            color: #888; /* 灰色 */
             cursor: pointer;
             z-index: 10;
         }
 
-        .back-button:hover {
-            color: #bbb; /* 當滑鼠懸停時變亮 */
+        /* 使用 SVG 來確保顏色為灰色 */
+        .back-button svg {
+            fill: #888; /* 灰色 */
+            width: 40px;
+            height: 40px;
         }
 
-        /* 關閉按鈕（灰色叉叉） */
+        .back-button:hover svg {
+            fill: #bbb; /* 當滑鼠懸停時變亮 */
+        }
+
+        /* 關閉按鈕（黑色叉叉） */
         .close-button {
             position: absolute;
             top: 20px;
             right: 20px;
             background-color: transparent;
             border: none;
-            font-size: 30px;
-            color: gray;
             cursor: pointer;
             z-index: 10;
+            font-size: 40px;
+            color: black;
         }
 
         .close-button:hover {
-            color: #ddd;
+            color: #555;
         }
 
         /* 隱藏照片牆 */
@@ -153,7 +158,10 @@
     <div id="photoGallery" class="gallery hidden"></div>
 
     <!-- 返回按鈕（灰色房子圖示） -->
-    <button id="backButton" class="back-button" onclick="goBack()">&#x1F3E0;</button> <!-- 房子 SVG -->
+    <button id="backButton" class="back-button" onclick="goBack()">
+        <!-- 灰色房子 SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3l9 8h-6v9H9v-9H3z"/></svg>
+    </button>
 
     <!-- 模態視窗（放大圖片） -->
     <div id="modal" class="modal" onclick="closeModal()">
