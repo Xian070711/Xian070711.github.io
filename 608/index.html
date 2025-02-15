@@ -12,19 +12,31 @@
             text-align: center;
         }
 
+        /* 合照 */
+        .group-photo {
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        .group-photo img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
         /* 主要容器 */
         .container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 20px;
-            margin-top: 50px;
+            margin-top: 20px;
         }
 
         /* 個人卡片 */
         .person-card {
-            width: 200px;
-            height: 250px;
+            width: 150px;
+            height: 200px;
             background-color: white;
             border-radius: 10px;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
@@ -41,25 +53,93 @@
 
         /* 大頭貼（圓形，修改圓心位置） */
         .avatar {
-            width: 150px;  /* 大小可以根據需求修改 */
-            height: 150px; /* 大小可以根據需求修改 */
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             object-fit: cover;
             position: absolute;
-            top: 30px; /* 讓圓心位於卡片框的1/3 */
+            top: 20px; /* 讓圓心位於卡片框的1/3 */
             left: 50%;
             transform: translateX(-50%);
         }
 
-        /* 座號與姓名（同一行，位於卡片下方1/3的位置） */
         .info {
-            position: absolute;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 25px;
+            margin-top: 15px;
+            font-size: 16px;
             font-weight: bold;
-            white-space: nowrap;
+        }
+
+        /* 響應式設計：手機上每行顯示 2 個 */
+        @media (max-width: 768px) {
+            .container {
+                gap: 10px;
+            }
+
+            .person-card {
+                width: 45%; /* 每行 2 個 */
+                height: 180px; /* 高度適應 */
+            }
+        }
+
+        /* 響應式設計：更小屏幕（例如手機）每行顯示 1 個 */
+        @media (max-width: 480px) {
+            .container {
+                gap: 10px;
+            }
+
+            .person-card {
+                width: 90%; /* 每行 1 個 */
+                height: 180px;
+            }
+        }
+
+        /* 返回箭頭 */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            cursor: pointer;
+        }
+
+        .back-button svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        /* 關閉圖片的叉叉按鈕 */
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 50%;
+            padding: 5px;
+        }
+
+        .close-button svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+
+        /* 模態視窗（放大圖片） */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
         }
 
         /* 照片牆 */
@@ -84,71 +164,7 @@
             transform: scale(1.1);
         }
 
-        /* 模態視窗（放大圖片） */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal img {
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 10px;
-        }
-
-        /* 返回按鈕（箭頭圖示） */
-        .back-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            padding: 10px;
-            background-color: rgba(0, 0, 0, 0.2); /* 灰色背景 */
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 100;
-        }
-
-        .back-button svg {
-            width: 40px;
-            fill: white;
-            transition: transform 0.2s;
-        }
-
-        .back-button:hover svg {
-            transform: scale(1.1);
-        }
-
-        /* 關閉按鈕（叉叉圖示） */
-        .close-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 10px;
-            background-color: rgba(0, 0, 0, 0.3); /* 灰色背景 */
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 101;
-        }
-
-        .close-button svg {
-            width: 40px;
-            height: 40px;
-            fill: white;
-            transition: transform 0.2s;
-        }
-
-        .close-button:hover svg {
-            transform: scale(1.1);
-        }
-
-        /* 隱藏元素 */
+        /* 隱藏照片牆 */
         .hidden {
             display: none;
         }
@@ -158,28 +174,36 @@
 
     <h1>畢業紀念冊</h1>
 
+    <!-- 合照 -->
+    <div class="group-photo">
+        <img src="合照URL" alt="畢業合照">
+    </div>
+
+    <!-- 主要容器：個人大頭貼 -->
     <div class="container" id="personContainer">
-        <!-- 王大明的卡片 -->
+        <!-- 36個個人卡片 -->
         <div class="person-card" onclick="openAlbum('1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA')">
-            <img class="avatar" src="https://drive.google.com/thumbnail?id=1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1&sz=w200" alt="王大明">
-            <div class="info">39 王大明</div>
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1&sz=w200" alt="01 王大明">
+            <div class="info">01 王大明</div>
         </div>
+        <!-- 其他35個個人卡片... -->
+        <!-- 範例重複35次，記得更換座號及姓名 -->
     </div>
 
     <!-- 照片牆 -->
     <div id="photoGallery" class="gallery hidden"></div>
 
-    <!-- 返回按鈕（箭頭圖示） -->
+    <!-- 返回按鈕 -->
     <div id="backButton" class="back-button hidden" onclick="goBack()">
         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="white">
             <path d="M15.54 3.54a1.5 1.5 0 0 1 0 2.12L9.21 12l6.33 6.33a1.5 1.5 0 0 1-2.12 2.12l-7.5-7.5a1.5 1.5 0 0 1 0-2.12l7.5-7.5a1.5 1.5 0 0 1 2.12 0z"/>
         </svg>
     </div>
 
-    <!-- 關閉按鈕（叉叉圖示） -->
-    <div id="closeButton" class="close-button hidden" onclick="closeModal()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="white">
-            <path d="M18.36 5.64a1.5 1.5 0 0 0-2.12 0L12 9.88 7.76 5.64a1.5 1.5 0 0 0-2.12 2.12L9.88 12 5.64 16.24a1.5 1.5 0 0 0 2.12 2.12L12 14.12l4.24 4.24a1.5 1.5 0 0 0 2.12-2.12L14.12 12l4.24-4.24a1.5 1.5 0 0 0 0-2.12z"/>
+    <!-- 關閉按鈕 -->
+    <div class="close-button" onclick="closeModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="white">
+            <path d="M18 6L6 18M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
     </div>
 
@@ -192,7 +216,7 @@
         const API_KEY = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0"; // 你的 API Key
 
         function openAlbum(folderId) {
-            // 隱藏個人卡片區域
+            // 隱藏原本的個人卡片區域
             document.getElementById("personContainer").classList.add("hidden");
             // 顯示照片牆和返回按鈕
             document.getElementById("photoGallery").classList.remove("hidden");
@@ -241,12 +265,10 @@
 
             modal.style.display = "flex";
             modalImage.src = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`; // 顯示較大解析度
-            document.getElementById("closeButton").classList.remove("hidden");
         }
 
         function closeModal() {
             document.getElementById("modal").style.display = "none";
-            document.getElementById("closeButton").classList.add("hidden");
         }
 
         function goBack() {
