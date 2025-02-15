@@ -5,108 +5,128 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>畢業紀念冊</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
+        /* 設定圖片顯示區 */
         .gallery {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
+            flex-wrap: wrap; /* 讓圖片自動換行 */
+            justify-content: center; /* 圖片居中 */
+            gap: 10px;  /* 設定圖片之間的間距 */
+            padding: 20px;
         }
+
+        /* 設定每張圖片的大小和顯示樣式 */
         .gallery img {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: transform 0.2s;
+            width: 200px; /* 設定圖片寬度 */
+            height: 200px; /* 設定圖片高度 */
+            object-fit: cover; /* 讓圖片自動縮放並保持比例 */
+            cursor: pointer;  /* 當滑鼠放上圖片時顯示指標 */
+            border-radius: 8px; /* 圓角效果 */
+            transition: transform 0.2s; /* 圖片縮放效果 */
         }
+
+        /* 當圖片懸停時，放大圖片 */
         .gallery img:hover {
             transform: scale(1.1);
         }
+
+        /* Modal 背景 */
         .modal {
-            display: none;
+            display: none; /* 預設隱藏 */
             position: fixed;
-            top: 0;
+            z-index: 1; /* 確保 modal 在最上層 */
+            padding-top: 100px;
             left: 0;
+            top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            justify-content: center;
-            align-items: center;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7); /* 背景半透明 */
         }
-        .modal img {
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 8px;
+
+        /* 放大圖片樣式 */
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
         }
+
+        /* 關閉按鈕 */
         .close {
+            color: #fff;
+            font-size: 35px;
+            font-weight: bold;
             position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 30px;
-            color: white;
+            top: 0;
+            right: 25px;
+            padding: 16px;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #f1f1f1;
+            text-decoration: none;
             cursor: pointer;
         }
     </style>
 </head>
 <body>
+    <div class="gallery" id="photoGallery">
+        <!-- 這裡的圖片會自動從資料夾中載入 -->
+    </div>
 
-    <h1>畢業紀念冊</h1>
-    <div class="gallery" id="photoGallery"></div>
-
-    <!-- 放大顯示圖片 -->
-    <div class="modal" id="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <img id="modalImage">
+    <!-- 放大顯示圖片的 Modal -->
+    <div class="modal" id="imageModal">
+        <span class="close" id="closeModal">&times;</span>
+        <img class="modal-content" id="modalImage">
     </div>
 
     <script>
-        const API_KEY = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0"; // 請填入你的 API 金鑰
-        const FOLDER_ID = "1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA"; // 替換成你的資料夾 ID
-        const gallery = document.getElementById("photoGallery");
-        const modal = document.getElementById("modal");
+        // 模擬從 Google Drive API 獲取資料夾中的所有圖片 ID
+        const imageIds = [
+            '1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1', // 替換為你的圖片 ID
+            '1eBU7eaQH10HCcYS9xGOObkkhganKA_fm'  // 替換為你的圖片 ID
+        ];
+
+        // 取得圖片顯示區域
+        const photoGallery = document.getElementById("photoGallery");
+
+        // 取得 modal 和圖片顯示的元素
+        const modal = document.getElementById("imageModal");
         const modalImage = document.getElementById("modalImage");
+        const closeModal = document.getElementById("closeModal");
 
-        async function loadImages() {
-            const API_URL = `https://www.googleapis.com/drive/v3/files?q=%27${FOLDER_ID}%27+in+parents+and+mimeType+contains+%27image%27&key=${API_KEY}&fields=files(id,name)`;
-
-            try {
-                const response = await fetch(API_URL);
-                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-
-                const data = await response.json();
-                gallery.innerHTML = ""; // 清空畫面
-
-                if (!data.files || data.files.length === 0) {
-                    gallery.innerHTML = "<p>沒有找到圖片，請確認資料夾權限</p>";
-                    return;
-                }
-
-                data.files.forEach((file) => {
-                    const img = document.createElement("img");
-                    img.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w300`; // 載入縮圖
-                    img.alt = file.name;
-                    img.onclick = function () {
-                        modal.style.display = "flex";
-                        modalImage.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w1000`; // 顯示較大圖片
-                    };
-                    gallery.appendChild(img);
-                });
-            } catch (error) {
-                console.error("圖片載入錯誤：", error);
-                gallery.innerHTML = "<p>發生錯誤，請檢查 API 金鑰與資料夾權限</p>";
-            }
+        // 加載圖片並顯示
+        function loadImages() {
+            imageIds.forEach(id => {
+                const imgElement = document.createElement('img');
+                const imgUrl = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`;  // 顯示較大解析度的縮圖
+                imgElement.src = imgUrl;
+                imgElement.alt = "畢業照";
+                imgElement.onclick = function() {
+                    // 點擊圖片後，顯示放大的圖片
+                    modal.style.display = "flex";
+                    modalImage.src = `https://drive.google.com/uc?id=${id}`;  // 顯示完整圖片
+                };
+                photoGallery.appendChild(imgElement);
+            });
         }
 
-        function closeModal() {
+        // 關閉 modal
+        closeModal.onclick = function() {
             modal.style.display = "none";
         }
 
+        // 當點擊 modal 以外的區域時也關閉 modal
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // 初始化載入圖片
         loadImages();
     </script>
-
 </body>
 </html>
