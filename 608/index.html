@@ -97,15 +97,18 @@
 
         /* 返回按鈕（箭頭圖示） */
         .back-button {
-            margin-top: 20px;
+            position: fixed;
+            top: 20px;
+            left: 20px;
             padding: 10px;
-            background: none;
-            border: none;
+            background-color: rgba(0, 0, 0, 0.2); /* 灰色背景 */
+            border-radius: 50%;
             cursor: pointer;
+            z-index: 100;
         }
 
         .back-button svg {
-            width: 40px; /* 調整箭頭大小 */
+            width: 40px;
             fill: white;
             transition: transform 0.2s;
         }
