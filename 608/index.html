@@ -40,6 +40,41 @@
                 grid-template-columns: repeat(2, 1fr); /* 手機 2 欄 */
             }
         }
+
+        .top-gallery {
+            display: flex;
+            justify-content: center;
+            gap: 15px;  /* 兩個框框的間距 */
+            margin-bottom: 20px; /* 確保與個人區塊有距離 */
+        }
+        
+        .photo-container {
+            width: 120px; /* 與個人照片一致 */
+            height: 120px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+            position: relative;
+        }
+        
+        .photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        
+        .caption {
+            position: absolute;
+            bottom: -25px; /* 讓文字在圖片下方 */
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .photo-container:hover {
+            transform: scale(1.1);
+        }
         
 
         /* 個人卡片 */
@@ -181,8 +216,21 @@
 <body>
 
     <h1>畢業紀念冊</h1>
+    
+    <div class="top-gallery">
+        <div class="photo-container" onclick="openFolder('group-photos')">
+            <img class="photo" src="https://lh3.googleusercontent.com/d/1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1" alt="合照">
+            <div class="caption">合照</div>
+        </div>
+        <div class="photo-container" onclick="openFolder('teachers')">
+            <img class="photo" src="https://lh3.googleusercontent.com/d/1ycNs-shE-51_Ev3N8XuGjf0q_lp6Ab2C" alt="老師們">
+            <div class="caption">老師們</div>
+        </div>
+    </div>
 
-   <div class="container" id="personContainer">
+
+    
+    <div class="container" id="personContainer">
         <!-- 第一排 -->
         <div class="person-card" onclick="openAlbum('1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA')">
             <img class="avatar" src="https://drive.google.com/thumbnail?id=1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1&sz=w200" alt="學生01">
@@ -268,6 +316,15 @@
 
     <script>
         const API_KEY = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0"; // 你的 API Key
+
+        function openFolder(folderName) {
+            const folderLinks = {
+                "group-photos": "https://drive.google.com/drive/folders/1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA",
+                "teachers": "https://drive.google.com/drive/folders/1Uk-Cytv_qjelZSzg9UajylDj6ZJIpPRc"
+            };
+            
+            window.open(folderLinks[folderName], "_blank");
+        }        
 
         function openAlbum(folderId) {
             // 隱藏原本的個人卡片區域
