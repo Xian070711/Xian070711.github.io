@@ -10,6 +10,8 @@
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             text-align: center;
+            margin: 0;
+            padding: 0;
         }
 
         /* 主要容器 */
@@ -95,19 +97,21 @@
             border-radius: 10px;
         }
 
-        /* 返回按鈕 */
+        /* 返回按鈕（房子圖示） */
         .back-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: white;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: transparent;
             border: none;
-            border-radius: 5px;
+            font-size: 30px;
+            color: white;
             cursor: pointer;
+            z-index: 10;
         }
 
         .back-button:hover {
-            background-color: #0056b3;
+            color: #ddd;
         }
 
         /* 隱藏照片牆 */
@@ -131,8 +135,8 @@
     <!-- 照片牆 -->
     <div id="photoGallery" class="gallery hidden"></div>
 
-    <!-- 返回按鈕 -->
-    <button id="backButton" class="back-button hidden" onclick="goBack()">返回</button>
+    <!-- 返回按鈕（房子圖示） -->
+    <button id="backButton" class="back-button" onclick="goBack()">🏠</button>
 
     <!-- 模態視窗（放大圖片） -->
     <div id="modal" class="modal" onclick="closeModal()">
@@ -140,7 +144,7 @@
     </div>
 
     <script>
-        const API_KEY = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0"; // 替換為你的 Google Drive API Key
+        const API_KEY = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0"; // 你的 API Key
 
         function openAlbum(folderId) {
             // 隱藏原本的個人卡片區域
