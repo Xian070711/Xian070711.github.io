@@ -8,22 +8,48 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin-top: 50px;
         }
-        img {
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .gallery img {
+            width: 200px;
+            height: auto;
             border-radius: 10px;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+        .gallery img:hover {
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body>
     <h1>畢業紀念冊</h1>
-    <p>這是我們的畢業照：</p>
+    <div class="gallery" id="photoGallery"></div>
 
-    <!-- 顯示圖片 -->
-    <img src="https://drive.google.com/thumbnail?id=1vjIV9LM4XR0cBdrPa9mkxYvXGvUMBh2k" alt="畢業照" width="300">
+    <script>
+        // 照片 ID 清單（替換成你的 Google Drive 照片 ID）
+        const photoIDs = [
+            "1vjIV9LM4XR0cBdrPa9mkxYvXGvUMBh2k",  // 照片 1
+            "1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1",  // 照片 2
+            "1eBU7eaQH10HCcYS9xGOObkkhganKA_fm",  // 照片 3
+            "你的圖片ID4"   // 可以繼續增加
+        ];
 
+        // 取得 gallery 容器
+        const gallery = document.getElementById("photoGallery");
 
-    <p>希望你喜歡這張照片！</p>
+        // 動態生成圖片
+        photoIDs.forEach(id => {
+            const img = document.createElement("img");
+            img.src = `https://drive.google.com/thumbnail?id=${id}`;
+            img.alt = "畢業照";
+            gallery.appendChild(img);
+        });
+    </script>
 </body>
 </html>
