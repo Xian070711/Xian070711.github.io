@@ -32,26 +32,34 @@
             padding-top: 20px;
             cursor: pointer;
             transition: transform 0.2s;
+            position: relative;
         }
 
         .person-card:hover {
             transform: scale(1.05);
         }
 
-        /* 大頭貼（圓形） */
+        /* 大頭貼（圓形，修改圓心位置） */
         .avatar {
             width: 80px;
             height: 80px;
             border-radius: 50%;
             object-fit: cover;
-            margin-top: 20px;
+            position: absolute;
+            top: 33%; /* 圓心移至卡片的1/3位置 */
+            left: 50%;
+            transform: translateX(-50%);
         }
 
-        /* 座號與姓名 */
+        /* 座號與姓名（同一行，位於卡片下方1/3的位置） */
         .info {
-            margin-top: 15px;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
             font-size: 18px;
             font-weight: bold;
+            white-space: nowrap;
         }
 
         /* 照片牆 */
