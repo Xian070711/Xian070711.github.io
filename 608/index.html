@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>畢業紀念冊</title>
+    <link href="https://cdn.jsdelivr.net/npm/lightbox2@2.11.3/dist/css/lightbox.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,48 +28,13 @@
         .gallery img:hover {
             transform: scale(1.1);
         }
-
-        /* 模態框樣式 */
-        .modal {
-            display: none; /* 隱藏模態框 */
-            position: fixed;
-            z-index: 1; /* 在最上層 */
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7); /* 背景透明黑 */
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            margin: auto;
-            max-width: 90%;
-            max-height: 90%;
-        }
-
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 25px;
-            color: #fff;
-            font-size: 35px;
-            font-weight: bold;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
     <h1>畢業紀念冊</h1>
     <div class="gallery" id="photoGallery"></div>
 
-    <!-- 模態框 -->
-    <div id="myModal" class="modal">
-        <span class="close" id="closeModal">&times;</span>
-        <img class="modal-content" id="modalImage" />
-    </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.3/dist/js/lightbox-plus-jquery.min.js"></script>
     <script>
         // 照片 ID 清單
         const photoIDs = [
@@ -80,36 +46,20 @@
         // 取得 gallery 容器
         const gallery = document.getElementById("photoGallery");
 
-        // 取得模態框和關閉按鈕
-        const modal = document.getElementById("myModal");
-        const modalImage = document.getElementById("modalImage");
-        const closeModal = document.getElementById("closeModal");
-
-        // 點擊圖片顯示模態框
+        // 建立圖片元素並加入 gallery
         photoIDs.forEach(id => {
+            const a = document.createElement("a");
+            a.href = `https://drive.google.com/uc?export=view&id=${id}`; // 顯示完整圖片
+            a.setAttribute("data-lightbox", "gallery");  // lightbox 分組
+            a.setAttribute("data-title", "畢業照");
+
             const img = document.createElement("img");
             img.src = `https://drive.google.com/thumbnail?id=${id}`; // 縮略圖
             img.alt = "畢業照";
 
-            img.onclick = function() {
-                modal.style.display = "flex";
-                modalImage.src = `https://drive.google.com/uc?export=view&id=${id}`; // 顯示完整圖片
-            };
-
-            gallery.appendChild(img);
+            a.appendChild(img);
+            gallery.appendChild(a);
         });
-
-        // 點擊關閉按鈕關閉模態框
-        closeModal.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        // 點擊模態框背景關閉模態框
-        window.onclick = function(event) {
-            if (event.target === modal) {
-                modal.style.display = "none";
-            }
-        }
     </script>
 </body>
 </html>
