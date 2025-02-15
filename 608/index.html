@@ -64,7 +64,7 @@
     </div>
 
     <script>
-        const API_KEY = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0"; // 請填入你的 API 金鑰
+        const API_KEY = "你的API金鑰"; // 請填入你的 API 金鑰
         const FOLDER_ID = "1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA"; // 替換成你的資料夾 ID
         const gallery = document.getElementById("photoGallery");
         const modal = document.getElementById("modal");
@@ -91,7 +91,7 @@
                     img.alt = file.name;
                     img.onclick = function () {
                         modal.style.display = "flex";
-                        modalImage.src = `https://drive.google.com/uc?id=${file.id}`; // 顯示完整圖片
+                        modalImage.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w1000`; // 顯示較大圖片
                     };
                     gallery.appendChild(img);
                 });
