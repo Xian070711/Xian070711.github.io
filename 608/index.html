@@ -40,7 +40,47 @@
                 grid-template-columns: repeat(2, 1fr); /* 手機 2 欄 */
             }
         }
+        
+        /* 合照、老師們的大框框 */
+        .album-card {
+            width: 420px;
+            height: 200px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
 
+        .album-card:hover {
+            transform: scale(1.05);
+        }
+
+        .album-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.8);
+            transition: filter 0.3s;
+        }
+
+        .album-card:hover .album-image {
+            filter: brightness(1);
+        }
+
+        .album-info {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 30px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        }
 
         /* 個人卡片 */
         .person-card {
@@ -175,6 +215,19 @@
 <body>
 
     <h1>畢業紀念冊</h1>
+    
+    <div class="container" id="personContainer">
+        <!-- 合照和老師們 -->
+        <div class="album-card" onclick="openAlbum('合照的雲端硬碟資料夾ID')">
+            <img class="album-image" src="https://drive.google.com/thumbnail?id=1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1&sz=w200" alt="合照">
+            <div class="album-info">合照</div>
+        </div>
+
+        <div class="album-card" onclick="openAlbum('老師們的雲端硬碟資料夾ID')">
+            <img class="album-image" src="https://drive.google.com/thumbnail?id=1ycNs-shE-51_Ev3N8XuGjf0q_lp6Ab2C&sz=w200" alt="老師們">
+            <div class="album-info">老師們</div>
+        </div>
+
 
    <div class="container" id="personContainer">
         <!-- 第一排 -->
