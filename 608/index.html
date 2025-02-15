@@ -15,12 +15,32 @@
         /* 主要容器（排版根據螢幕大小變動） */
         .container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(6, 1fr); /* 電腦端固定6欄 */
             gap: 20px;
             justify-content: center;
             max-width: 1200px;
             margin: 50px auto;
         }
+
+        /* 響應式設計 */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: repeat(4, 1fr); /* 平板 4 欄 */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: repeat(3, 1fr); /* 小平板 3 欄 */
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                grid-template-columns: repeat(2, 1fr); /* 手機 2 欄 */
+            }
+        }
+
 
         /* 個人卡片 */
         .person-card {
@@ -63,12 +83,7 @@
             white-space: nowrap;
         }
         
-        /* 響應式設計，當螢幕小於600px時，每行顯示2個 */
-        @media (max-width: 600px) {
-            .container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
+
 
         /* 照片牆 */
         .gallery {
