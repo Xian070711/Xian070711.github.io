@@ -50,34 +50,32 @@
         
         .wide-photo-container {
             width: 400px;
-            height: 300px;
+            height: 200px;
             position: relative;
             border-radius: 10px;
+            cursor: pointer;
             overflow: hidden;
         }
         
         .wide-photo {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* 確保圖片填滿 */
         }
         
         .wide-caption {
             position: absolute;
             bottom: 0;
             width: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
             text-align: center;
             font-size: 24px;
-            padding: 10px 0;
             font-weight: bold;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 0;
         }
-            
 
-
-        
-
+    
         /* 個人卡片 */
         .person-card {
             width: 200px;
@@ -218,17 +216,17 @@
 
     <h1>畢業紀念冊</h1>
     
+
     <div class="top-gallery">
-        <div class="wide-photo-container">
+        <div class="wide-photo-container" onclick="loadAlbum('1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA')">
             <img class="wide-photo" src="https://drive.google.com/thumbnail?id=1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1&sz=w400" alt="合照">
             <div class="wide-caption">合照</div>
         </div>
-        <div class="wide-photo-container">
+        <div class="wide-photo-container" onclick="loadAlbum('1Uk-Cytv_qjelZSzg9UajylDj6ZJIpPRc')">
             <img class="wide-photo" src="https://drive.google.com/thumbnail?id=1ycNs-shE-51_Ev3N8XuGjf0q_lp6Ab2C&sz=w400" alt="老師們">
             <div class="wide-caption">老師們</div>
         </div>
-    </div>
-
+    </div>    
 
 
     
@@ -319,14 +317,23 @@
     <script>
         const API_KEY = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0"; // 你的 API Key
 
-        function openFolder(folderName) {
-            const folderLinks = {
-                "group-photos": "https://drive.google.com/drive/folders/1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA",
-                "teachers": "https://drive.google.com/drive/folders/1Uk-Cytv_qjelZSzg9UajylDj6ZJIpPRc"
-            };
-            
-            window.open(folderLinks[folderName], "_blank");
-        }        
+        function loadAlbum(folderId) {
+            const gallery = document.getElementById("gallery");
+            gallery.innerHTML = ""; // 清空目前的照片
+        
+            const baseUrl = "https://drive.google.com/thumbnail?id=";
+            const photoIds = folderId === "1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA"
+                ? ["1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1"] // 合照
+                : ["1ycNs-shE-51_Ev3N8XuGjf0q_lp6Ab2C"]; // 老師們
+        
+            photoIds.forEach(id => {
+                const img = document.createElement("img");
+                img.className = "avatar";
+                img.src = `${baseUrl}${id}&sz=w200`;
+                img.alt = "相簿圖片";
+                gallery.appendChild(img);
+            });
+        }       
 
         function openAlbum(folderId) {
             // 隱藏原本的個人卡片區域
