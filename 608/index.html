@@ -12,14 +12,16 @@
             text-align: center;
         }
 
-        /* 主要容器 */
+        /* 主要容器（6×6 排列） */
         .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
             gap: 20px;
-            margin-top: 50px;
-        }
+            justify-content: center;
+            max-width: 1200px;
+            margin: 50px auto;
+            }
+
 
         /* 個人卡片 */
         .person-card {
@@ -145,23 +147,67 @@
 
     <h1>畢業紀念冊</h1>
 
-    <div class="container" id="personContainer">
-        <!-- 王大明的卡片 -->
+   <div class="container" id="personContainer">
+        <!-- 第一排 -->
         <div class="person-card" onclick="openAlbum('1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA')">
-            <img class="avatar" src="https://drive.google.com/thumbnail?id=1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1&sz=w200" alt="王大明">
-            <div class="info">39 王大明</div>
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1&sz=w200" alt="學生01">
+            <div class="info">01 王大明</div>
         </div>
 
-        <!-- 李小明的卡片 -->
         <div class="person-card" onclick="openAlbum('1Uk-Cytv_qjelZSzg9UajylDj6ZJIpPRc')">
-            <img class="avatar" src="https://drive.google.com/thumbnail?id=1ycNs-shE-51_Ev3N8XuGjf0q_lp6Ab2C&sz=w200" alt="李小明">
-            <div class="info">10 李小明</div>
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1ycNs-shE-51_Ev3N8XuGjf0q_lp6Ab2C&sz=w200" alt="學生02">
+            <div class="info">02 李小明</div>
         </div>
 
-        <!-- 王小美的卡片 -->
         <div class="person-card" onclick="openAlbum('1NO_ER47mXslo5qrMzh1BW9MZ0CeN2SkI')">
-            <img class="avatar" src="https://drive.google.com/thumbnail?id=1OOR5CvwK5MLKrtUzBKRetDr35ViTC0VF&sz=w200" alt="王小美">
-            <div class="info">20 王小美</div>
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1OOR5CvwK5MLKrtUzBKRetDr35ViTC0VF&sz=w200" alt="學生03">
+            <div class="info">03 王小美</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1&sz=w200" alt="學生04">
+            <div class="info">04 張偉</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1Uk-Cytv_qjelZSzg9UajylDj6ZJIpPRc')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1ycNs-shE-51_Ev3N8XuGjf0q_lp6Ab2C&sz=w200" alt="學生05">
+            <div class="info">05 陳美玲</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1NO_ER47mXslo5qrMzh1BW9MZ0CeN2SkI')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1OOR5CvwK5MLKrtUzBKRetDr35ViTC0VF&sz=w200" alt="學生06">
+            <div class="info">06 黃志強</div>
+        </div>
+
+        <!-- 第二排 -->
+        <div class="person-card" onclick="openAlbum('1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1&sz=w200" alt="學生07">
+            <div class="info">07 林曉華</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1Uk-Cytv_qjelZSzg9UajylDj6ZJIpPRc')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1ycNs-shE-51_Ev3N8XuGjf0q_lp6Ab2C&sz=w200" alt="學生08">
+            <div class="info">08 趙明</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1NO_ER47mXslo5qrMzh1BW9MZ0CeN2SkI')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1OOR5CvwK5MLKrtUzBKRetDr35ViTC0VF&sz=w200" alt="學生09">
+            <div class="info">09 周小安</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1&sz=w200" alt="學生10">
+            <div class="info">10 高志豪</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1Uk-Cytv_qjelZSzg9UajylDj6ZJIpPRc')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1ycNs-shE-51_Ev3N8XuGjf0q_lp6Ab2C&sz=w200" alt="學生11">
+            <div class="info">11 何欣怡</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1NO_ER47mXslo5qrMzh1BW9MZ0CeN2SkI')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1OOR5CvwK5MLKrtUzBKRetDr35ViTC0VF&sz=w200" alt="學生12">
+            <div class="info">12 吳俊傑</div>
         </div>
     </div>
 
