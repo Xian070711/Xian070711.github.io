@@ -89,7 +89,8 @@
     <div class="profile-container">
         <div class="profile" onclick="loadPhotos()">
             <div class="profile-image">
-                <img src="https://drive.google.com/uc?id=1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1" alt="王大明大頭貼">
+                <!-- 使用 thumbnail 顯示大頭貼 -->
+                <img src="https://drive.google.com/thumbnail?id=1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1&sz=w1000" alt="王大明大頭貼">
             </div>
             <div class="profile-info">
                 <p class="name">王大明</p>
@@ -121,7 +122,7 @@
                         data.files.forEach(file => {
                             const imgElement = document.createElement('img');
                             const fileId = file.id;
-                            imgElement.src = `https://drive.google.com/uc?id=${fileId}`;
+                            imgElement.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;  // 使用縮圖連結，並設定較大尺寸
                             imgElement.alt = file.name;
                             gallery.appendChild(imgElement);
                         });
