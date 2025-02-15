@@ -45,36 +45,40 @@
             display: flex;
             justify-content: center;
             gap: 15px;  /* 兩個框框的間距 */
-            margin-bottom: 20px; /* 確保與個人區塊有距離 */
+            margin-bottom: 30px; /* 與個人區塊有距離 */
         }
         
-        .photo-container {
-            width: 120px; /* 與個人照片一致 */
-            height: 120px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.3s ease-in-out;
+        .wide-photo-container {
+            width: 400px;
+            height: 300px;
             position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 10px;
+            transition: transform 0.3s ease-in-out;
         }
         
-        .photo {
+        .wide-photo {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 10px;
         }
         
-        .caption {
+        .wide-caption {
             position: absolute;
-            bottom: -25px; /* 讓文字在圖片下方 */
+            bottom: 0;
             width: 100%;
+            background: rgba(0, 0, 0, 0.6); /* 半透明黑色 */
+            color: white;
             text-align: center;
-            font-size: 14px;
+            font-size: 20px;
+            padding: 10px 0;
         }
         
-        .photo-container:hover {
-            transform: scale(1.1);
+        .wide-photo-container:hover {
+            transform: scale(1.05);
         }
+
         
 
         /* 個人卡片 */
