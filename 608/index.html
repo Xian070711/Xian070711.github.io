@@ -97,7 +97,7 @@
             border-radius: 10px;
         }
 
-        /* 返回按鈕（灰色返回箭頭圖示） */
+        /* 返回按鈕（向左箭頭圖示） */
         .back-button {
             position: absolute;
             top: 20px;
@@ -108,7 +108,7 @@
             z-index: 10;
         }
 
-        /* 使用 SVG 來確保顏色為灰色 */
+        /* 向左箭頭的 SVG */
         .back-button svg {
             fill: #888; /* 灰色 */
             width: 40px;
@@ -119,7 +119,7 @@
             fill: #bbb; /* 當滑鼠懸停時變亮 */
         }
 
-        /* 關閉按鈕（黑色叉叉） */
+        /* 關閉按鈕（灰色叉叉） */
         .close-button {
             position: absolute;
             top: 20px;
@@ -128,12 +128,12 @@
             border: none;
             cursor: pointer;
             z-index: 10;
-            font-size: 40px;
-            color: black;
+            font-size: 50px; /* 讓叉叉變大 */
+            color: gray; /* 灰色 */
         }
 
         .close-button:hover {
-            color: #555;
+            color: #bbb;
         }
 
         /* 隱藏照片牆 */
@@ -157,10 +157,10 @@
     <!-- 照片牆 -->
     <div id="photoGallery" class="gallery hidden"></div>
 
-    <!-- 返回按鈕（灰色返回箭頭圖示） -->
+    <!-- 返回按鈕（向左箭頭圖示） -->
     <button id="backButton" class="back-button" onclick="goBack()">
-        <!-- 灰色返回箭頭 SVG -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 7l-5 5 5 5V7z"/></svg>
+        <!-- 向左箭頭的 SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7v14z"/></svg>
     </button>
 
     <!-- 模態視窗（放大圖片） -->
