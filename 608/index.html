@@ -1,138 +1,150 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>畢業紀念冊</title>
+    <title>畢業照片展示</title>
     <style>
-        /* 整體樣式設定 */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-        }
-
-        .profile-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 50px;
-        }
-
-        /* 每個個人檔案的框框 */
-        .profile {
-            width: 200px;
-            height: 300px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .profile:hover {
-            transform: scale(1.05); /* 滑鼠懸停時放大 */
-        }
-
-        /* 大頭貼圓形 */
-        .profile-image {
-            width: 120px;
-            height: 120px;
-            margin: 20px auto;
-            border-radius: 50%;
-            overflow: hidden;
-        }
-
-        .profile-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* 座號與名字 */
-        .profile-info {
-            padding: 10px;
-        }
-
-        .name {
-            font-size: 18px;
-            font-weight: bold;
-            margin: 0;
-        }
-
-        .seat-number {
-            font-size: 16px;
-            color: #555;
-        }
-
-        /* 照片展示區 */
-        #photoGallery {
-            margin-top: 50px;
+        /* 圖片框架 */
+        .gallery {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
+        }
+        
+        .gallery .person {
+            width: 180px;
+            height: 280px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
         }
 
-        #photoGallery img {
-            width: 200px;
-            height: 200px;
+        .gallery .person:hover {
+            transform: scale(1.05);
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 60%;
             object-fit: cover;
-            border-radius: 8px;
+            border-radius: 50%;
+        }
+
+        .person .name-and-number {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .name-and-number p {
+            margin: 5px 0;
+        }
+
+        /* 模態視窗樣式 */
+        #modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding-top: 60px;
+        }
+
+        #modalContent {
+            margin: auto;
+            display: block;
+            max-width: 100%;
+            max-height: 80%;
+        }
+
+        #modal img {
+            width: auto;
+            height: 100%;
+            margin: auto;
         }
     </style>
 </head>
 <body>
 
-    <!-- 個人檔案區 -->
-    <div class="profile-container">
-        <div class="profile" onclick="loadPhotos()">
-            <div class="profile-image">
-                <!-- 使用 thumbnail 顯示大頭貼 -->
-                <img src="https://drive.google.com/thumbnail?id=1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1&sz=w1000" alt="王大明大頭貼">
-            </div>
-            <div class="profile-info">
-                <p class="name">王大明</p>
-                <p class="seat-number">39號</p>
-            </div>
-        </div>
+    <h1>畢業照片展示</h1>
+    <div class="gallery" id="photoGallery"></div>
+
+    <!-- 模態視窗 -->
+    <div id="modal">
+        <img id="modalContent" src="" alt="">
     </div>
 
-    <!-- 照片展示區 -->
-    <div id="photoGallery"></div>
-
     <script>
-        // 這個 function 用來載入該人的所有照片
-        function loadPhotos() {
-            // 假設這是王大明的資料夾 ID
-            const folderId = "1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA"; // 改成王大明資料夾的 ID
-            const apiKey = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0"; // 替換為你的 API 金鑰
+        const API_KEY = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0";  // 替換為你的 API 金鑰
+        const FOLDER_ID = "1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA";  // 替換為你的資料夾 ID
 
-            const API_URL = `https://www.googleapis.com/drive/v3/files?q='%27${folderId}%27+in+parents+and+mimeType+contains+%27image%27&key=${apiKey}&fields=files(id,name)`;
+        async function loadImages() {
+            const API_URL = `https://www.googleapis.com/drive/v3/files?q='%27${FOLDER_ID}%27+in+parents+and+mimeType+contains+%27image%27&key=${API_KEY}&fields=files(id,name)`;
 
-            fetch(API_URL)
-                .then(response => response.json())
-                .then(data => {
-                    const gallery = document.getElementById("photoGallery");
-                    gallery.innerHTML = ""; // 清空現有的內容
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
 
-                    if (data.files && data.files.length > 0) {
-                        // 如果有照片，則顯示
-                        data.files.forEach(file => {
-                            const imgElement = document.createElement('img');
-                            const fileId = file.id;
-                            imgElement.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;  // 使用縮圖連結，並設定較大尺寸
-                            imgElement.alt = file.name;
-                            gallery.appendChild(imgElement);
-                        });
-                    } else {
-                        gallery.innerHTML = "<p>沒有找到照片！</p>";
-                    }
-                })
-                .catch(error => console.error('Error loading photos:', error));
+                const gallery = document.getElementById("photoGallery");
+                gallery.innerHTML = ""; // 清空現有內容
+
+                if (data.files && data.files.length > 0) {
+                    data.files.forEach(file => {
+                        const imgElement = document.createElement('img');
+                        const fileId = file.id;
+                        imgElement.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;  // 使用 thumbnail 並設置較大尺寸
+                        imgElement.alt = file.name;
+
+                        const personElement = document.createElement('div');
+                        personElement.classList.add('person');
+                        
+                        // 模擬每個人的名字與座號（假設資料夾名稱包含名字與座號）
+                        const nameAndNumber = document.createElement('div');
+                        nameAndNumber.classList.add('name-and-number');
+                        nameAndNumber.innerHTML = `<p>${file.name}</p><p>座號: 39</p>`;
+                        
+                        // 將圖片和資料合併到每個人的框框中
+                        personElement.appendChild(imgElement);
+                        personElement.appendChild(nameAndNumber);
+
+                        // 當點擊圖片時顯示更大的照片
+                        personElement.onclick = function() {
+                            const modal = document.getElementById("modal");
+                            const modalImage = document.getElementById("modalContent");
+                            modal.style.display = "flex";
+                            modalImage.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`; // 放大顯示
+                        };
+
+                        gallery.appendChild(personElement);
+                    });
+                } else {
+                    gallery.innerHTML = "<p>沒有找到照片！</p>";
+                }
+            } catch (error) {
+                console.error('Error loading photos:', error);
+            }
         }
-    </script>
 
+        // 監聽模態視窗的關閉
+        window.onclick = function(event) {
+            const modal = document.getElementById("modal");
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        };
+
+        // 初始化加載圖片
+        loadImages();
+    </script>
 </body>
 </html>
