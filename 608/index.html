@@ -3,46 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>畢業紀念冊</title>
+    <title>Google Drive 相簿</title>
     <script>
-        // 你的 API 金鑰（從 Google Cloud Console 取得）
+        // 你的 API 金鑰
         const API_KEY = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0";
         // 你的 Google Drive 資料夾 ID
         const FOLDER_ID = "1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA";
         
-        // Google Drive API URL
-        const API_URL = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents&key=${API_KEY}&fields=files(id,name)`;
+        // Google Drive API 查詢 URL
+        const API_URL = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents+and+mimeType contains 'image'&key=${API_KEY}&fields=files(id,name)`;
 
         async function loadImages() {
-            const response = await fetch(API_URL);
-            const data = await response.json();
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
 
-            const gallery = document.getElementById("photoGallery");
-            gallery.innerHTML = ""; // 清空舊內容
+                const gallery = document.getElementById("photoGallery");
+                gallery.innerHTML = ""; // 清空舊內容
 
-            data.files.forEach(file => {
-                const imgContainer = document.createElement("div");
-                imgContainer.style.display = "inline-block";
-                imgContainer.style.margin = "10px";
+                if (!data.files || data.files.length === 0) {
+                    gallery.innerHTML = "<p>找不到圖片，請檢查資料夾權限！</p>";
+                    return;
+                }
 
-                const img = document.createElement("img");
-                img.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w400`; // 使用縮圖
-                img.alt = file.name;
-                img.style.width = "200px";
-                img.style.height = "200px";
-                img.style.objectFit = "cover";
-                img.style.borderRadius = "10px";
-                img.style.cursor = "pointer";
+                data.files.forEach(file => {
+                    const imgContainer = document.createElement("div");
+                    imgContainer.style.display = "inline-block";
+                    imgContainer.style.margin = "10px";
 
-                // 點擊圖片放大
-                img.onclick = function() {
-                    document.getElementById("modal").style.display = "flex";
-                    document.getElementById("modalImage").src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w1000`; // 放大圖
-                };
+                    const img = document.createElement("img");
+                    img.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w400`; // 縮圖
+                    img.alt = file.name;
+                    img.style.width = "200px";
+                    img.style.height = "200px";
+                    img.style.objectFit = "cover";
+                    img.style.borderRadius = "10px";
+                    img.style.cursor = "pointer";
 
-                imgContainer.appendChild(img);
-                gallery.appendChild(imgContainer);
-            });
+                    // 點擊圖片放大
+                    img.onclick = function() {
+                        document.getElementById("modal").style.display = "flex";
+                        document.getElementById("modalImage").src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w1000`; // 大圖
+                    };
+
+                    imgContainer.appendChild(img);
+                    gallery.appendChild(imgContainer);
+                });
+            } catch (error) {
+                console.error("發生錯誤:", error);
+                document.getElementById("photoGallery").innerHTML = "<p>載入圖片時發生錯誤，請檢查 API 金鑰！</p>";
+            }
         }
 
         window.onload = loadImages;
@@ -76,7 +86,7 @@
     </style>
 </head>
 <body>
-    <h1>畢業紀念冊</h1>
+    <h1>Google Drive 相簿</h1>
     <div class="gallery" id="photoGallery"></div>
 
     <!-- 放大圖片的 Modal -->
