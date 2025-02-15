@@ -276,12 +276,12 @@
             document.getElementById("photoGallery").classList.remove("hidden");
             document.getElementById("backButton").classList.remove("hidden");
 
-            const API_URL = https://www.googleapis.com/drive/v3/files?q=%27${folderId}%27+in+parents+and+mimeType+contains+%27image%27&key=${API_KEY}&fields=files(id,name);
+            const API_URL = `https://www.googleapis.com/drive/v3/files?q=%27${folderId}%27+in+parents+and+mimeType+contains+%27image%27&key=${API_KEY}&fields=files(id,name)`;
 
             fetch(API_URL)
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error(HTTP error! Status: ${response.status});
+                        throw new Error(`HTTP error! Status: ${response.status}`);
                     }
                     return response.json();
                 })
@@ -298,7 +298,7 @@
                         const imgElement = document.createElement("img");
                         const fileId = file.id;
 
-                        imgElement.src = https://drive.google.com/thumbnail?id=${fileId}&sz=w300;
+                        imgElement.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w300`;
                         imgElement.alt = file.name;
                         imgElement.onclick = function () {
                             openModal(fileId);
@@ -318,7 +318,7 @@
             const modalImage = document.getElementById("modalImage");
 
             modal.style.display = "flex";
-            modalImage.src = https://drive.google.com/thumbnail?id=${id}&sz=w1000; // 顯示較大解析度
+            modalImage.src = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`; // 顯示較大解析度
         }
 
         function closeModal() {
