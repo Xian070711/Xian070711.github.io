@@ -17,8 +17,9 @@
         }
         .gallery img {
             width: 200px; /* 限制最大寬度 */
-            height: auto; /* 保持原始比例 */
-            object-fit: contain; /* 確保圖片不變形 */
+            height: 200px; /* 設定固定高度 */
+            object-fit: cover; /* 填滿框框，保持比例並裁切多餘部分 */
+            object-position: center; /* 顯示圖片的中間部分 */
             border-radius: 10px;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s;
