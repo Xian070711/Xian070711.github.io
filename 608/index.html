@@ -1,65 +1,9 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>畢業紀念冊</title>
-    <link href="https://cdn.jsdelivr.net/npm/lightbox2@2.11.3/dist/css/lightbox.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        .gallery {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-        }
-        .gallery img {
-            width: 200px; /* 限制最大寬度 */
-            height: 200px; /* 設定固定高度 */
-            object-fit: cover; /* 填滿框框，保持比例並裁切多餘部分 */
-            object-position: center; /* 顯示圖片的中間部分 */
-            border-radius: 10px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s;
-        }
-        .gallery img:hover {
-            transform: scale(1.1);
-        }
-    </style>
+    <title>我的照片展示</title>
 </head>
 <body>
-    <h1>畢業紀念冊</h1>
-    <div class="gallery" id="photoGallery"></div>
-
-    <script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.3/dist/js/lightbox-plus-jquery.min.js"></script>
-    <script>
-        // 照片 ID 清單
-        const photoIDs = [
-            "1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1",  // 照片 1
-            "1eBU7eaQH10HCcYS9xGOObkkhganKA_fm",  // 照片 2
-            "1vjIV9LM4XR0cBdrPa9mkxYvXGvUMBh2k"   // 照片 3（舊的 ID）
-        ];
-
-        // 取得 gallery 容器
-        const gallery = document.getElementById("photoGallery");
-
-        // 建立圖片元素並加入 gallery
-        photoIDs.forEach(id => {
-            const a = document.createElement("a");
-            a.href = `https://drive.google.com/uc?export=view&id=${id}`; // 顯示完整圖片
-            a.setAttribute("data-lightbox", "gallery");  // lightbox 分組
-            a.setAttribute("data-title", "畢業照");
-
-            const img = document.createElement("img");
-            img.src = `https://drive.google.com/thumbnail?id=${id}`; // 縮略圖
-            img.alt = "畢業照";
-
-            a.appendChild(img);
-            gallery.appendChild(a);
-        });
-    </script>
+    <h1>我的高中時期照片</h1>
+    <img src="https://drive.google.com/uc?id=1vjIV9LM4XR0cBdrPa9mkxYvXGvUMBh2k" alt="高中照片">
 </body>
 </html>
