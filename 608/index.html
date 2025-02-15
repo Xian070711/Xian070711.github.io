@@ -104,12 +104,13 @@
             cursor: pointer;
         }
 
-        .back-button img {
+        .back-button svg {
             width: 40px; /* 調整箭頭大小 */
+            fill: white;
             transition: transform 0.2s;
         }
 
-        .back-button:hover img {
+        .back-button:hover svg {
             transform: scale(1.1);
         }
 
@@ -135,9 +136,11 @@
     <div id="photoGallery" class="gallery hidden"></div>
 
     <!-- 返回按鈕（箭頭圖示） -->
-    <button id="backButton" class="back-button hidden" onclick="goBack()">
-        <img src="https://cdn-icons-png.flaticon.com/512/271/271220.png" alt="返回">
-    </button>
+    <div id="backButton" class="back-button hidden" onclick="goBack()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="white">
+            <path d="M15.54 3.54a1.5 1.5 0 0 1 0 2.12L9.21 12l6.33 6.33a1.5 1.5 0 0 1-2.12 2.12l-7.5-7.5a1.5 1.5 0 0 1 0-2.12l7.5-7.5a1.5 1.5 0 0 1 2.12 0z"/>
+        </svg>
+    </div>
 
     <!-- 模態視窗（放大圖片） -->
     <div id="modal" class="modal" onclick="closeModal()">
