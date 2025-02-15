@@ -94,13 +94,33 @@
             max-height: 90%;
             border-radius: 10px;
         }
+
+        /* 返回按鈕 */
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* 隱藏照片牆 */
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
 
     <h1>畢業紀念冊</h1>
 
-    <div class="container">
+    <div class="container" id="personContainer">
         <!-- 王大明的卡片 -->
         <div class="person-card" onclick="openAlbum('1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA')">
             <img class="avatar" src="https://drive.google.com/thumbnail?id=1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1&sz=w200" alt="王大明">
@@ -108,8 +128,11 @@
         </div>
     </div>
 
-    <!-- 相簿區域 -->
-    <div id="photoGallery" class="gallery"></div>
+    <!-- 照片牆 -->
+    <div id="photoGallery" class="gallery hidden"></div>
+
+    <!-- 返回按鈕 -->
+    <button id="backButton" class="back-button hidden" onclick="goBack()">返回</button>
 
     <!-- 模態視窗（放大圖片） -->
     <div id="modal" class="modal" onclick="closeModal()">
@@ -117,9 +140,15 @@
     </div>
 
     <script>
-        const API_KEY = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0"; // 替換為你的 Google Drive API Key
+        const API_KEY = "你的API_KEY"; // 替換為你的 Google Drive API Key
 
         function openAlbum(folderId) {
+            // 隱藏原本的個人卡片區域
+            document.getElementById("personContainer").classList.add("hidden");
+            // 顯示照片牆和返回按鈕
+            document.getElementById("photoGallery").classList.remove("hidden");
+            document.getElementById("backButton").classList.remove("hidden");
+
             const API_URL = `https://www.googleapis.com/drive/v3/files?q=%27${folderId}%27+in+parents+and+mimeType+contains+%27image%27&key=${API_KEY}&fields=files(id,name)`;
 
             fetch(API_URL)
@@ -167,6 +196,14 @@
 
         function closeModal() {
             document.getElementById("modal").style.display = "none";
+        }
+
+        function goBack() {
+            // 顯示個人卡片區域
+            document.getElementById("personContainer").classList.remove("hidden");
+            // 隱藏照片牆與返回按鈕
+            document.getElementById("photoGallery").classList.add("hidden");
+            document.getElementById("backButton").classList.add("hidden");
         }
     </script>
 
