@@ -11,6 +11,22 @@
             background-color: #f4f4f4;
             text-align: center;
         }
+        /*進入按鈕：大一點*/
+        .enter-button {
+            padding: 15px 40px;
+            font-size: 20px;
+            border: none;
+            background: #ff6b6b;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        /*帶光暈效果*/
+        .enter-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.8);
+        }
+
 
         /* 主要容器（排版根據螢幕大小變動） */
         .container {
@@ -228,6 +244,17 @@
         .close-button:hover {
             background-color: rgba(255, 0, 0, 0.7);
         }
+
+        /*點開大圖時像翻書*/
+        .lightbox img {
+            transform-origin: center;
+            animation: flip 0.5s ease;
+        }
+        @keyframes flip {
+            0% { transform: rotateY(90deg); }
+            100% { transform: rotateY(0deg); }
+        }
+
     </style>
 </head>
 <body>
@@ -341,6 +368,33 @@
     <script>
         const API_KEY = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0"; // 你的 API Key
 
+        document.addEventListener('DOMContentLoaded', () => {
+            setupEnterButton();
+            setupBackgroundEffect();
+        });
+        
+        // 設定進入按鈕的淡出動畫
+        function setupEnterButton() {
+            const enterButton = document.getElementById('enterButton');
+            if (!enterButton) return;
+        
+            enterButton.addEventListener('click', () => {
+                document.body.style.opacity = '0';
+                setTimeout(() => {
+                    window.location.href = 'gallery.html';
+                }, 500);
+            });
+        }
+        
+        // 設定滑鼠移動時的背景效果
+        function setupBackgroundEffect() {
+            if (!window.location.pathname.includes('gallery.html')) return;
+        
+            document.addEventListener('mousemove', (e) => {
+                document.body.style.backgroundPosition = `${e.clientX / 50}px ${e.clientY / 50}px`;
+            });
+        }
+      
 
     
         //個人
