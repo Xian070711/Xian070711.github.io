@@ -44,6 +44,22 @@
         .top-gallery {
             display: flex;
             justify-content: center;
+            gap: 300px; /* 預設桌機版間距 */
+            margin-bottom: 30px;
+            flex-wrap: wrap; /* 當空間不夠時，自動換行 */
+        }
+        
+        /* 小螢幕（手機） */
+        @media (max-width: 768px) {
+            .top-gallery {
+                gap: 50px; /* 手機版間距變小 */
+            }
+        }
+        
+
+        .top-gallery {
+            display: flex;
+            justify-content: center;
             gap: 300px;
             margin-bottom: 30px;
         }
