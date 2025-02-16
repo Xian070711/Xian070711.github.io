@@ -44,62 +44,54 @@
         .top-gallery {
             display: flex;
             justify-content: center;
-            gap: 20px; /* 預設桌機版間距 */
-            margin-bottom: 30px;
-            flex-wrap: wrap; /* 當空間不夠時，自動換行 */
-        }
-        
-        @media (max-width: 768px) {
-            .top-gallery {
-                gap: 0; /* 手機版間距變 0，避免換行時留大空格 */
-                justify-content: center; /* 確保換行後內容置中 */
-            }
-        }
-
-        
-
-        .top-gallery {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
+            gap: 20px; /* 間距 */
             margin-bottom: 30px;
         }
         
-        .wide-photo-container {
+        .wide-card {
+            position: relative;
             width: 400px;
             height: 200px;
-            position: relative;
-            border-radius: 10px;
             cursor: pointer;
             overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
         }
         
-        .wide-photo {
+        .wide-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .wide-avatar {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* 確保圖片填滿 */
+            object-fit: cover;
         }
         
         .wide-caption {
             position: absolute;
-            bottom: 0;
+            bottom: 10px;
             width: 100%;
             text-align: center;
-            font-size: 25px; /* 字體大小 25px */
+            font-size: 25px;
             font-weight: bold;
-            color: white; /* 文字顏色白色 */
-            letter-spacing: 10px; /* 字母間距增加（可調整） */
+            color: white;
+            letter-spacing: 10px;
             text-shadow: 
                 -2px -2px 0 black,  
                 2px -2px 0 black,  
                 -2px 2px 0 black,  
-                2px 2px 0 black; /* 黑色文字描邊 */
-            padding: 10px 0;
+                2px 2px 0 black;
         }
-
-
-
-
+        
+        @media (max-width: 768px) {
+            .top-gallery {
+                flex-direction: column;
+                gap: 10px; /* 手機版縮小間距 */
+                align-items: center;
+            }
+        }
 
     
         /* 個人卡片 */
@@ -243,16 +235,20 @@
     <h1>畢業紀念冊</h1>
     
 
-    <div class="top-gallery">
-        <div class="wide-photo-container" onclick="loadAlbum('1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA')">
-            <img class="wide-photo" src="https://drive.google.com/thumbnail?id=1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1&sz=w400" alt="合照">
-            <div class="wide-caption">合照</div>
+        <div class="top-gallery">
+            <!-- 合照框框 -->
+            <div class="wide-card" onclick="openAlbum('1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA')">
+                <img class="wide-avatar" src="https://drive.google.com/thumbnail?id=1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1&sz=w400" alt="合照">
+                <div class="wide-caption">合照</div>
+            </div>
+        
+            <!-- 老師們框框 -->
+            <div class="wide-card" onclick="openAlbum('1Uk-Cytv_qjelZSzg9UajylDj6ZJIpPRc')">
+                <img class="wide-avatar" src="https://drive.google.com/thumbnail?id=1ycNs-shE-51_Ev3N8XuGjf0q_lp6Ab2C&sz=w400" alt="老師們">
+                <div class="wide-caption">老師們</div>
+            </div>
         </div>
-        <div class="wide-photo-container" onclick="loadAlbum('1Uk-Cytv_qjelZSzg9UajylDj6ZJIpPRc')">
-            <img class="wide-photo" src="https://drive.google.com/thumbnail?id=1ycNs-shE-51_Ev3N8XuGjf0q_lp6Ab2C&sz=w400" alt="老師們">
-            <div class="wide-caption">老師們</div>
-        </div>
-    </div>    
+   
 
 
     
@@ -322,6 +318,8 @@
 
     <!-- 照片牆 -->
     <div id="photoGallery" class="gallery hidden"></div>
+    <div id="photoGallery" class="hidden"></div>
+    <button id="backButton" class="hidden" onclick="goBack()">返回</button>
 
     <!-- 返回箭頭 -->
     <div id="backButton" class="back-button hidden" onclick="goBack()">
@@ -342,25 +340,54 @@
 
     <script>
         const API_KEY = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0"; // 你的 API Key
-
-        function loadAlbum(folderId) {
-            const gallery = document.getElementById("gallery");
-            gallery.innerHTML = ""; // 清空目前的照片
         
-            const baseUrl = "https://drive.google.com/thumbnail?id=";
-            const photoIds = folderId === "1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA"
-                ? ["1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1"] // 合照
-                : ["1ycNs-shE-51_Ev3N8XuGjf0q_lp6Ab2C"]; // 老師們
+        //合照，老師們
+        function openAlbum(folderId) {
+            // 隱藏所有框框
+            document.getElementById("personContainer").classList.add("hidden");
+            document.querySelector(".top-gallery").classList.add("hidden");
         
-            photoIds.forEach(id => {
-                const img = document.createElement("img");
-                img.className = "avatar";
-                img.src = `${baseUrl}${id}&sz=w200`;
-                img.alt = "相簿圖片";
-                gallery.appendChild(img);
-            });
-        }       
+            // 顯示照片牆和返回按鈕
+            document.getElementById("photoGallery").classList.remove("hidden");
+            document.getElementById("backButton").classList.remove("hidden");
+        
+            const API_URL = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'image'&key=${API_KEY}&fields=files(id,name)`;
+        
+            fetch(API_URL)
+                .then(response => response.json())
+                .then(data => {
+                    const gallery = document.getElementById("photoGallery");
+                    gallery.innerHTML = ""; // 清空舊圖片
+        
+                    if (!data.files || data.files.length === 0) {
+                        gallery.innerHTML = "<p>這個相簿沒有照片。</p>";
+                        return;
+                    }
+        
+                    data.files.forEach((file) => {
+                        const imgElement = document.createElement("img");
+                        imgElement.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w300`;
+                        imgElement.alt = file.name;
+                        imgElement.onclick = function () {
+                            openModal(file.id);
+                        };
+                        gallery.appendChild(imgElement);
+                    });
+                })
+                .catch(error => {
+                    console.error("錯誤:", error);
+                    document.getElementById("photoGallery").innerHTML = "<p>載入圖片時發生錯誤。</p>";
+                });
+        }
+        
+        function goBack() {
+            document.getElementById("personContainer").classList.remove("hidden");
+            document.querySelector(".top-gallery").classList.remove("hidden");
+            document.getElementById("photoGallery").classList.add("hidden");
+            document.getElementById("backButton").classList.add("hidden");
 
+      
+        //個人
         function openAlbum(folderId) {
             // 隱藏原本的個人卡片區域
             document.getElementById("personContainer").classList.add("hidden");
