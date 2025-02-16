@@ -113,15 +113,25 @@
         }
 
         /* 大頭貼（圓形，修改圓心位置） */
-        .avatar {
-            width: 150px;  
+        .avatar-container {
+            width: 150px;
             height: 150px;
             border-radius: 50%;
-            object-fit: cover;
-            object-position: top; /* 顯示上半部 */
-            overflow: hidden;
-            transform: scale(1.5); /* 只放大圖片內容 */
+            overflow: hidden; /* 確保圖片超出的部分不會顯示 */
+            position: relative;
         }
+        
+        .avatar {
+            width: 100%;  /* 讓圖片撐滿容器 */
+            height: 100%;
+            object-fit: cover;
+            object-position: top; /* 只顯示上半部 */
+            position: absolute;
+            top: -25%;  /* 向上移動以露出上半部 */
+            left: 0;
+            transform: scale(1.5); /* 只放大內部圖片 */
+        }
+
 
 
 
