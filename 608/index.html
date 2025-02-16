@@ -51,28 +51,30 @@
         .wide-photo-container {
             width: 400px;
             height: 200px;
-            background: #ddd; /* 背景顏色，避免圖片載入前是空白 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: relative;
             border-radius: 10px;
             cursor: pointer;
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
-            position: relative;
             overflow: hidden;
+        }
+        
+        .wide-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 確保圖片填滿 */
         }
         
         .wide-caption {
             position: absolute;
+            bottom: 0;
             width: 100%;
             text-align: center;
             font-size: 24px;
             font-weight: bold;
-            background: rgba(0, 0, 0, 0.5); /* 半透明底色 */
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
             padding: 10px 0;
         }
+
 
 
     
