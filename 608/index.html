@@ -49,12 +49,13 @@
             flex-wrap: wrap; /* 當空間不夠時，自動換行 */
         }
         
-        /* 小螢幕（手機） */
         @media (max-width: 768px) {
             .top-gallery {
-                gap: 50px; /* 手機版間距變小 */
+                gap: 0; /* 手機版間距變 0，避免換行時留大空格 */
+                justify-content: center; /* 確保換行後內容置中 */
             }
         }
+
         
 
         .top-gallery {
