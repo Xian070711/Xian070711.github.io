@@ -114,15 +114,12 @@
 
         /* 大頭貼（圓形，修改圓心位置） */
         .avatar {
-            width: 100px;  /* 保持圓形大小 */
-            height: 100px; /* 保持圓形大小 */
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
             object-fit: cover;
-            object-position: top; /* 讓圖片顯示上半部 */
-            position: absolute;
-            top: 30px; /* 讓圓心位於卡片框的1/3 */
-            left: 50%;
-            transform: translateX(-50%) scale(1.5); /* 放大圖片 */
+            object-position: top; /* 只顯示上半部 */
+            transform: scale(1.5); /* 放大內部圖片 */
         }
 
 
