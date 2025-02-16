@@ -235,19 +235,19 @@
     <h1>畢業紀念冊</h1>
     
 
-        <div class="top-gallery">
-            <!-- 合照框框 -->
-            <div class="wide-card" onclick="openAlbum('1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA')">
-                <img class="wide-avatar" src="https://drive.google.com/thumbnail?id=1i2tsdJEqIyQfIX7uT55qYD5fPNydmic1&sz=w400" alt="合照">
-                <div class="wide-caption">合照</div>
-            </div>
-        
-            <!-- 老師們框框 -->
-            <div class="wide-card" onclick="openAlbum('1Uk-Cytv_qjelZSzg9UajylDj6ZJIpPRc')">
-                <img class="wide-avatar" src="https://drive.google.com/thumbnail?id=1ycNs-shE-51_Ev3N8XuGjf0q_lp6Ab2C&sz=w400" alt="老師們">
-                <div class="wide-caption">老師們</div>
-            </div>
+    <div class="top-gallery">
+        <!-- 合照框框 -->
+        <div class="wide-card" onclick="openAlbum('1qIBrFrwmVm3LG3Sqs4yaMQbB8OhSjm-N')">
+            <img class="wide-avatar" src="https://drive.google.com/thumbnail?id=1gHByTIfB9nWLf8GHqeSNb0HYMt2GT6po&sz=w400" alt="合照">
+            <div class="wide-caption">合照</div>
         </div>
+    
+        <!-- 老師們框框 -->
+        <div class="wide-card" onclick="openAlbum('1--Gt5uMTZI0iXaxLnn3j3n4dVnKJx-68')">
+            <img class="wide-avatar" src="https://drive.google.com/thumbnail?id=1jnCc0RtIHJ2gBHwScac2_RpV3fzKEJUO&sz=w400" alt="老師們">
+            <div class="wide-caption">老師們</div>
+        </div>
+    </div>
    
 
 
@@ -336,6 +336,9 @@
         </div>
         <img id="modalImage">
     </div>
+    
+    <!-- 返回 / 叉叉按鈕 -->
+    <button id="backButton" class="hidden" onclick="goBack()">✖ 返回</button>
 
     <script>
         const API_KEY = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0"; // 你的 API Key
@@ -406,6 +409,62 @@
             document.getElementById("photoGallery").classList.add("hidden");
             document.getElementById("backButton").classList.add("hidden");
         }
+
+        function openAlbum(folderId) {
+            console.log("開啟相簿，ID:", folderId); // 確認事件是否觸發
+        
+            // 隱藏所有框框
+            document.getElementById("personContainer").classList.add("hidden");
+            document.querySelector(".top-gallery").classList.add("hidden");
+        
+            // 顯示照片牆和返回按鈕
+            document.getElementById("photoGallery").classList.remove("hidden");
+            document.getElementById("backButton").classList.remove("hidden");
+        
+            const API_URL = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType contains 'image'&key=${API_KEY}&fields=files(id,name)`;
+        
+            fetch(API_URL)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const gallery = document.getElementById("photoGallery");
+                    gallery.innerHTML = ""; // 清空舊圖片
+        
+                    if (!data.files || data.files.length === 0) {
+                        gallery.innerHTML = "<p>這個相簿沒有照片。</p>";
+                        return;
+                    }
+        
+                    data.files.forEach((file) => {
+                        const imgElement = document.createElement("img");
+                        imgElement.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w300`;
+                        imgElement.alt = file.name;
+                        imgElement.onclick = function () {
+                            openModal(file.id);
+                        };
+                        gallery.appendChild(imgElement);
+                    });
+                })
+                .catch(error => {
+                    console.error("錯誤:", error);
+                    document.getElementById("photoGallery").innerHTML = "<p>載入圖片時發生錯誤。</p>";
+                });
+        }
+        
+        // 統一的返回鍵 / 叉叉鍵
+        function goBack() {
+            console.log("返回首頁");
+        
+            document.getElementById("personContainer").classList.remove("hidden");
+            document.querySelector(".top-gallery").classList.remove("hidden");
+            document.getElementById("photoGallery").classList.add("hidden");
+            document.getElementById("backButton").classList.add("hidden");
+        }
+        
     </script>
 
 </body>
