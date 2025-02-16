@@ -114,13 +114,18 @@
 
         /* 大頭貼（圓形，修改圓心位置） */
         .avatar {
-            width: 225px;  /* 放大圖片的實際尺寸 */
-            height: 225px; /* 放大圖片的實際尺寸 */
-            border-radius: 50%;  /* 仍然讓圖片呈現圓形 */
-            object-fit: cover;  /* 保持圖片比例並填滿 */
-            object-position: top;  /* 讓圖片顯示上半部 */
-            clip-path: circle(75px at center);  /* 用圓形遮罩限制顯示範圍 */
+            width: 225px;  /* 放大圖片本身 */
+            height: 225px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: top;
+            clip-path: circle(75px at center); /* 保持圓形 */
+            position: absolute;
+            top: -20px; /* 調整 Y 軸位置，讓圓形回到正確位置 */
+            left: 50%;
+            transform: translateX(-50%);
         }
+
 
 
 
