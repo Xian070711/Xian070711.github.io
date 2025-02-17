@@ -270,7 +270,7 @@
 <body>
 
     <header id="toolbar">
-        <nav id="navbar" class="navbar">畢業紀念冊</nav>
+         <h1>畢業紀念冊</h1>
     </header>
     
     <div class="top-gallery">
@@ -520,18 +520,15 @@
         function openAlbum(folderId) {
             console.log("開啟相簿，ID:", folderId);
         
-            // 隱藏所有框框
+            // 隱藏個人卡片區域 & 合照、老師區域
             document.getElementById("personContainer").classList.add("hidden");
             document.querySelector(".top-gallery").classList.add("hidden");
-        
-            // 隱藏工具列
-            document.getElementById("navbar").style.display = "none"; 
         
             // 顯示照片牆和返回按鈕
             document.getElementById("photoGallery").classList.remove("hidden");
             document.getElementById("backButton").classList.remove("hidden");
         
-            const API_URL = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType contains 'image'&key=${API_KEY}&fields=files(id,name)`;
+            const API_URL = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'image'&key=${API_KEY}&fields=files(id,name)`;
         
             fetch(API_URL)
                 .then(response => {
@@ -564,44 +561,31 @@
                     document.getElementById("photoGallery").innerHTML = "<p>載入圖片時發生錯誤。</p>";
                 });
         }
-
-
         
         function openModal(id) {
             const modal = document.getElementById("modal");
             const modalImage = document.getElementById("modalImage");
-            const navbar = document.getElementById("navbar"); // 取得工具列元素
         
             modal.style.display = "flex";
-            modalImage.src = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`; // 顯示大解析度圖片
-        
-            if (navbar) {
-                navbar.style.display = "none"; // 隱藏工具列
-            }
+            modalImage.src = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`; // 顯示較大解析度
         }
-
         
         function closeModal() {
-            const modal = document.getElementById("modal");
-            const navbar = document.getElementById("navbar"); // 取得工具列元素
-        
-            modal.style.display = "none";
+            document.getElementById("modal").style.display = "none";
         }
-
         
         function goBack() {
             console.log("返回首頁");
-            const navbar = document.getElementById("navbar"); // 取得工具列元素
         
+            // 顯示個人卡片區域 & 合照、老師區域
             document.getElementById("personContainer").classList.remove("hidden");
             document.querySelector(".top-gallery").classList.remove("hidden");
+        
+            // 隱藏照片牆與返回按鈕
             document.getElementById("photoGallery").classList.add("hidden");
             document.getElementById("backButton").classList.add("hidden");
-        
-            if (navbar) {
-                navbar.style.display = "block"; // **返回首頁時，恢復工具列**
-            }
         }
+
 
 
 
