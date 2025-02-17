@@ -518,9 +518,10 @@
         const API_KEY = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0"; // 你的 API Key
         
         function openAlbum(folderId) {
-            console.log("開啟相簿，ID:", folderId);
-        
-            // 隱藏個人卡片區域 & 合照、老師區域
+            console.log("開啟相簿，ID:", folderId); // 確認事件是否觸發
+            const navbar = document.getElementById("navbar"); // 取得工具列元素
+            
+            // 隱藏所有框框
             document.getElementById("personContainer").classList.add("hidden");
             document.querySelector(".top-gallery").classList.add("hidden");
         
@@ -528,7 +529,11 @@
             document.getElementById("photoGallery").classList.remove("hidden");
             document.getElementById("backButton").classList.remove("hidden");
         
-            const API_URL = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'image'&key=${API_KEY}&fields=files(id,name)`;
+            if (navbar) {
+                navbar.style.display = "none"; // 隱藏工具列
+            }
+        
+            const API_URL = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType contains 'image'&key=${API_KEY}&fields=files(id,name)`;
         
             fetch(API_URL)
                 .then(response => {
@@ -561,6 +566,7 @@
                     document.getElementById("photoGallery").innerHTML = "<p>載入圖片時發生錯誤。</p>";
                 });
         }
+
         
         function openModal(id) {
             const modal = document.getElementById("modal");
@@ -590,15 +596,18 @@
         
         function goBack() {
             console.log("返回首頁");
+            const navbar = document.getElementById("navbar"); // 取得工具列元素
         
-            // 顯示個人卡片區域 & 合照、老師區域
             document.getElementById("personContainer").classList.remove("hidden");
             document.querySelector(".top-gallery").classList.remove("hidden");
-        
-            // 隱藏照片牆與返回按鈕
             document.getElementById("photoGallery").classList.add("hidden");
             document.getElementById("backButton").classList.add("hidden");
+        
+            if (navbar) {
+                navbar.style.display = "block"; // 顯示工具列
+            }
         }
+
 
 
         
