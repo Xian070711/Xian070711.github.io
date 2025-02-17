@@ -276,7 +276,7 @@
         <h1>畢業紀念冊</h1>
     </header>
 
-
+    <nav id="navbar" class="navbar">畢業紀念冊</nav>
     
     <div class="top-gallery">
         <!-- 合照框框 -->
@@ -570,14 +570,28 @@
         function openModal(id) {
             const modal = document.getElementById("modal");
             const modalImage = document.getElementById("modalImage");
+            const navbar = document.getElementById("navbar"); // 取得工具列元素
         
             modal.style.display = "flex";
-            modalImage.src = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`; // 顯示較大解析度
+            modalImage.src = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`; // 顯示大解析度圖片
+        
+            if (navbar) {
+                navbar.style.display = "none"; // 隱藏工具列
+            }
         }
+
         
         function closeModal() {
-            document.getElementById("modal").style.display = "none";
+            const modal = document.getElementById("modal");
+            const navbar = document.getElementById("navbar"); // 取得工具列元素
+        
+            modal.style.display = "none";
+        
+            if (navbar) {
+                navbar.style.display = "block"; // 顯示工具列
+            }
         }
+
         
         function goBack() {
             console.log("返回首頁");
