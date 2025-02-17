@@ -530,7 +530,7 @@
             document.getElementById("backButton").classList.remove("hidden");
         
             if (navbar) {
-                navbar.style.display = "none"; // 隱藏工具列
+                navbar.style.display = "none"; // **完全隱藏工具列（包括背景）**
             }
         
             const API_URL = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType contains 'image'&key=${API_KEY}&fields=files(id,name)`;
@@ -587,10 +587,6 @@
             const navbar = document.getElementById("navbar"); // 取得工具列元素
         
             modal.style.display = "none";
-        
-            if (navbar) {
-                navbar.style.display = "block"; // 顯示工具列
-            }
         }
 
         
@@ -604,9 +600,10 @@
             document.getElementById("backButton").classList.add("hidden");
         
             if (navbar) {
-                navbar.style.display = "block"; // 顯示工具列
+                navbar.style.display = "block"; // **返回首頁時，恢復工具列**
             }
         }
+
 
 
 
