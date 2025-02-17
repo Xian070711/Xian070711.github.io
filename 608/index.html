@@ -12,13 +12,12 @@
             color: white;
         }
         
-        /* 工具列初始樣式 */
-        #navbar {
-            position: fixed; /* 固定在畫面最上方 */
+        #toolbar {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 80px; /* 預設高度 */
+            height: 60px;
             background-color: #333; /* 深灰色 */
             color: white;
             display: flex;
@@ -26,20 +25,10 @@
             align-items: center;
             font-size: 24px;
             font-weight: bold;
-            transition: all 0.3s ease-in-out; /* 滑動時的動畫 */
+            transition: all 0.3s ease-in-out;
+            z-index: 1000; /* 確保在最上層 */
         }
-        
-        /* 工具列內部 */
-        .navbar-content {
-            padding: 10px;
-        }
-        
-        /* 當滑動時縮小 & 透明 */
-        .shrink {
-            height: 50px;
-            background-color: rgba(51, 51, 51, 0.8); /* 變透明一點 */
-            font-size: 18px; /* 變小 */
-        }
+
 
 
 
@@ -277,11 +266,10 @@
 </head>
 <body>
 
-    <header id="navbar">
-        <div class="navbar-content">
-            <span>畢業紀念冊</span>
-        </div>
+    <header id="toolbar">
+        <h1>畢業紀念冊</h1>
     </header>
+
 
     
     <div class="top-gallery">
@@ -301,6 +289,67 @@
 
     <div class="container" id="personContainer">
         <!-- 第一排 -->
+        <div class="person-card" onclick="openAlbum('1z6QM41ku9n3fpRhfbU5f0razulsuVYGd')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1yXdxy9NkwSGWWvZ2nte1zrTL8ZG7k5iB&sz=w200" alt="學生01">
+            <div class="info">01 呂俞潔</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1lT4TJVQi5I8-27qHxO998Tj1yDG7TVD3')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1a3MZYR5cnrZsPktsLdiv8n1A10fD96fT&sz=w200" alt="學生02">
+            <div class="info">02 李其宣</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1iaKV6Yh-O6IpFXUo25hgSqDAXR7TDj1o')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1zqlDhDBH11VK8G6_6MvupeoPBOhaOqQl&sz=w200" alt="學生03">
+            <div class="info">03 林巧婕</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1SPM35uSbLmZdndyg4th-D1FpJA--C7oQ')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1ljFS1UKpAfiCOKPukuIQm9lwhhSe-9mo&sz=w200" alt="學生04">
+            <div class="info">04 紀妙璇</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1CVOmYHqVcTpczcsgvgDbepvglxdemtF-')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1kSQF2EIsWeNp3v6HLxvMeXp_oaedCfys&sz=w200" alt="學生05">
+            <div class="info">07 張硯均</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1V8nd1V29e6vpaFPaYxd4tz88CiW6y7f_')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1S1Jz7DQ5-0RGZm4zgfuOlszlBvUUOmo2&sz=w200" alt="學生06">
+            <div class="info">08 張薰云</div>
+        </div>
+
+        <!-- 第二排 -->
+        <div class="person-card" onclick="openAlbum('1-muanCMbVYQPERn6boReFWw3bzsZVEhX')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1hQ06_bycw5z2lL5LaKyz5vbt3XiuUFTF&sz=w200" alt="學生07">
+            <div class="info">09 陳怡筠</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('17sDIogKH-1OVuKIVQDKSoTsy6KMGsm4O')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1sAT4hig4FOcRvq0H8o7qUsyjfRoFXAXT&sz=w200" alt="學生08">
+            <div class="info">10 陳亭希</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1E06G4Z1FPOF66G97cnw97ivMkX0pg8xO')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=12To6YApOqBDESuFNTCmzGf4RsIDrj7w6&sz=w200" alt="學生09">
+            <div class="info">11 陳品甄</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1YXJH3zbUZigvYNieSFO6_XM4iVKOxgit')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=14QmXurBKx_T1fajvvLi7fuk65iRCAlGx&sz=w200" alt="學生10">
+            <div class="info">12 陳姿臻</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1k5bE3mEnccVi1QpwzY3ou24hEQdPYXkp')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1XY1TbeGT891bCHyQZhUoqTWHfD92DD2h&sz=w200" alt="學生11">
+            <div class="info">13 陳宥蓉</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('11Z2BlE99cfGtFTVR-9STnoTKc4tffQSl')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1kcKIiKOgEz1zGPTSI_Jv32a5EEK09E59&sz=w200" alt="學生12">
+            <div class="info">14 陳湘湄</div>
+        </div>
+
         <div class="person-card" onclick="openAlbum('1z6QM41ku9n3fpRhfbU5f0razulsuVYGd')">
             <img class="avatar" src="https://drive.google.com/thumbnail?id=1yXdxy9NkwSGWWvZ2nte1zrTL8ZG7k5iB&sz=w200" alt="學生01">
             <div class="info">01 呂俞潔</div>
@@ -390,12 +439,15 @@
     <script>
         
         window.addEventListener("scroll", function () {
-            var navbar = document.getElementById("navbar");
-        
-            if (window.scrollY > 50) {
-                navbar.classList.add("shrink"); // 滾動超過 50px，縮小並變透明
+            let toolbar = document.getElementById("toolbar");
+            if (window.scrollY > 50) { // 滾動超過 50px
+                toolbar.style.height = "40px";  // 縮小高度
+                toolbar.style.backgroundColor = "rgba(51, 51, 51, 0.7)";  // 變透明一點
+                toolbar.style.fontSize = "18px"; // 字體變小
             } else {
-                navbar.classList.remove("shrink"); // 滑回頂部時恢復原狀
+                toolbar.style.height = "60px";  // 恢復原大小
+                toolbar.style.backgroundColor = "#333";  // 恢復深灰色
+                toolbar.style.fontSize = "24px"; // 字體恢復
             }
         });
 
