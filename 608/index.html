@@ -12,29 +12,35 @@
             color: white;
         }
         
-        /* 工具列基礎樣式 */
+        /* 工具列初始樣式 */
         #navbar {
-            position: fixed;
+            position: fixed; /* 固定在畫面最上方 */
             top: 0;
             left: 0;
             width: 100%;
-            height: 80px;
-            background-color: #333;  /* 深灰色 */
+            height: 80px; /* 預設高度 */
+            background-color: #333; /* 深灰色 */
             color: white;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             font-size: 24px;
             font-weight: bold;
-            transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out; /* 滑動時的動畫 */
         }
         
-        /* 滾動時縮小 */
-        .scrolled {
-            height: 50px;
-            background-color: rgba(51, 51, 51, 0.8); /* 變透明 */
-            font-size: 18px;
+        /* 工具列內部 */
+        .navbar-content {
+            padding: 10px;
         }
+        
+        /* 當滑動時縮小 & 透明 */
+        .shrink {
+            height: 50px;
+            background-color: rgba(51, 51, 51, 0.8); /* 變透明一點 */
+            font-size: 18px; /* 變小 */
+        }
+
 
 
         /* 主要容器（排版根據螢幕大小變動） */
@@ -272,8 +278,11 @@
 <body>
 
     <header id="navbar">
-        <div class="logo">🎓 畢業紀念網站</div>
+        <div class="navbar-content">
+            <span>畢業紀念冊</span>
+        </div>
     </header>
+
     
     <div class="top-gallery">
         <!-- 合照框框 -->
@@ -380,15 +389,16 @@
 
     <script>
         
-        window.addEventListener("scroll", function() {
-            const navbar = document.getElementById("navbar");
-            
+        window.addEventListener("scroll", function () {
+            var navbar = document.getElementById("navbar");
+        
             if (window.scrollY > 50) {
-                navbar.classList.add("scrolled");
+                navbar.classList.add("shrink"); // 滾動超過 50px，縮小並變透明
             } else {
-                navbar.classList.remove("scrolled");
+                navbar.classList.remove("shrink"); // 滑回頂部時恢復原狀
             }
         });
+
 
         
         const API_KEY = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0"; // 你的 API Key
