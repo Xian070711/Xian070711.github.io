@@ -518,20 +518,18 @@
         const API_KEY = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0"; // 你的 API Key
         
         function openAlbum(folderId) {
-            console.log("開啟相簿，ID:", folderId); // 確認事件是否觸發
-            const navbar = document.getElementById("navbar"); // 取得工具列元素
-            
+            console.log("開啟相簿，ID:", folderId);
+        
             // 隱藏所有框框
             document.getElementById("personContainer").classList.add("hidden");
             document.querySelector(".top-gallery").classList.add("hidden");
         
+            // 隱藏工具列
+            document.getElementById("navbar").style.display = "none"; 
+        
             // 顯示照片牆和返回按鈕
             document.getElementById("photoGallery").classList.remove("hidden");
             document.getElementById("backButton").classList.remove("hidden");
-        
-            if (navbar) {
-                navbar.style.display = "none"; // **完全隱藏工具列（包括背景）**
-            }
         
             const API_URL = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType contains 'image'&key=${API_KEY}&fields=files(id,name)`;
         
@@ -566,6 +564,7 @@
                     document.getElementById("photoGallery").innerHTML = "<p>載入圖片時發生錯誤。</p>";
                 });
         }
+
 
         
         function openModal(id) {
