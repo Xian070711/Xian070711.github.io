@@ -483,7 +483,7 @@
 
 
     <!-- 返回箭頭 -->
-    <div id="backButton" class="back-button hidden" onclick="goBack()">
+    <div id="modalBackButton" class="back-button hidden" onclick="handleBackClick()">
         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="white">
             <path d="M15.54 3.54a1.5 1.5 0 0 1 0 2.12L9.21 12l6.33 6.33a1.5 1.5 0 0 1-2.12 2.12l-7.5-7.5a1.5 1.5 0 0 1 0-2.12l7.5-7.5a1.5 1.5 0 0 1 2.12 0z"/>
         </svg>
@@ -600,7 +600,23 @@
             }
         });
         
+        function handleBackClick() {
+            const modal = document.getElementById("modal");
+            const isModalOpen = modal.style.display === "flex";
         
+            if (isModalOpen) {
+                closeModal();  // 只關掉放大照片
+            } else {
+                goBack();      // 回首頁
+            }
+        }
+        
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "Escape" || event.key === "Backspace") {
+                handleBackClick();  // 根據當前狀態做對應動作
+            }
+        });
+       
 
 
 
