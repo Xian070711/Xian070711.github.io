@@ -602,8 +602,20 @@
 
         
         function closeModal() {
-            document.getElementById("modal").style.display = "none";
+            const modal = document.getElementById("modal");
+            const modalImage = document.getElementById("modalImage");
+        
+            modal.style.display = "none";
+            modalImage.src = "";
+            modalImage.style.display = "none";
+        
+            // 移除 iframe（避免影片繼續播放）
+            const iframe = modal.querySelector("iframe");
+            if (iframe) {
+                iframe.remove();
+            }
         }
+
         
         function closeOnlyModal() {
             const modal = document.getElementById("modal");
