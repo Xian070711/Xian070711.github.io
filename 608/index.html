@@ -551,14 +551,17 @@
                             openModal(file.id, "image");
                         };
                     } else if (file.mimeType.startsWith("video/")) {
-                        element = document.createElement("video");
-                        element.src = `https://drive.google.com/uc?id=${file.id}`;
-                        element.controls = true;
-                        element.width = 300;
+                        element = document.createElement("img");
+                        element.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w300`;
+                        element.alt = file.name;
+                        element.style.objectFit = "cover";
+                        element.style.width = "150px";
+                        element.style.height = "150px";
                         element.onclick = function () {
                             openModal(file.id, "video");
                         };
                     }
+
                     element.alt = file.name;
                     gallery.appendChild(element);
                 });
