@@ -491,16 +491,9 @@
 
     <!-- 模態視窗（放大圖片） -->
     <div id="modal" class="modal" onclick="closeModal()">
-        <div class="close-button" onclick="closeModal()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="white">
-                <path d="M6 18L18 6M6 6l12 12" stroke="white" stroke-width="2"/>
-            </svg>
-        </div>
         <img id="modalImage">
     </div>
     
-    <!-- 返回 / 叉叉按鈕 -->
-    <button id="backButton" class="hidden" onclick="goBack()">✖ 返回</button>
 
     <script>
         
@@ -589,6 +582,13 @@
             document.getElementById("photoGallery").classList.add("hidden");
             document.getElementById("backButton").classList.add("hidden");
         }
+            document.addEventListener("keydown", function(event) {
+            if (event.key === "Escape" || event.key === "Backspace") {
+                goBack(); // 返回首頁 + 關閉 modal
+                closeModal(); // 確保 modal 一定被關掉
+            }
+        });
+
 
 
 
