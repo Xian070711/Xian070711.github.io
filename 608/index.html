@@ -581,7 +581,11 @@
             // 隱藏照片牆與返回按鈕
             document.getElementById("photoGallery").classList.add("hidden");
             document.getElementById("backButton").classList.add("hidden");
+
+            // 關閉 modal（放大圖片）
+            closeModal();
         }
+        
             document.addEventListener("keydown", function(event) {
             if (event.key === "Escape" || event.key === "Backspace") {
                 goBack(); // 返回首頁 + 關閉 modal
