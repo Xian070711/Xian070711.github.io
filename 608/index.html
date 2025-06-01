@@ -12,49 +12,37 @@
             color: white;
             padding-top: 100px; /* 確保工具列不會擋住內容 */
         }
-        /* 最上方的工具列樣式 */
+        /*最上面空據欄*/
         #toolbar {
-            position: relative; /* 讓裡面的子元素（像是上傳按鈕）能用絕對定位定位在它的範圍內 */
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 80px;
-            background-color: #333; /* 深灰背景 */
+            background-color: #333; /* 深灰色 */
             color: white;
-            display: flex; /* 使用 flex 讓內容在垂直方向置中 */
-            align-items: center; /* 垂直置中 */
-            justify-content: center; /* 預設內容（像是 h1）水平置中，但因為 h1 會被絕對定位，其實沒影響 */
-            font-size: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 25px; 
             font-weight: bold;
-            transition: all 0.3s ease-in-out; /* 滾動時的動畫平滑效果 */
-            z-index: 1000; /* 保證浮在最上層 */
+            transition: all 0.3s ease-in-out;
+            z-index: 1000; /* 確保在最上層 */
         }
-        
-        /* 標題文字（畢業紀念冊）的樣式 */
-        .toolbar-title {
-            position: absolute;       /* 讓這個元素浮在工具列裡的絕對位置 */
-            left: 50%;                /* 從左邊算一半寬度 */
-            transform: translateX(-50%); /* 向左偏移自身一半，達到真正水平置中 */
-            white-space: nowrap;      /* 防止文字換行，讓文字維持在一行內 */
-        }
-        
-        /* 右上角的上傳按鈕樣式 */
+
+
         #uploadButton {
-            position: absolute;       /* 絕對定位在 toolbar 裡 */
-            right: 20px;              /* 距離右邊 20px */
-            top: 50%;                 /* 從上方 50% 的位置開始 */
-            transform: translateY(-50%); /* 垂直方向向上偏移一半自身高度，讓圖示垂直置中 */
-            cursor: pointer;          /* 滑鼠移上去變成手指圖示 */
-            padding: 10px;            /* 圖示周圍空間，讓點擊範圍變大 */
-            border-radius: 50%;       /* 做成圓形的 hover 背景 */
-            transition: background-color 0.2s, transform 0.2s; /* 滑鼠懸停時的動畫效果 */
-        }
+            margin-right: 20px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            transition: background-color 0.2s, transform 0.2s;
+            }
         
-        /* 滑鼠懸停在上傳按鈕時的效果 */
         #uploadButton:hover {
-            background-color: rgba(255, 255, 255, 0.2); /* 背景變淡白色 */
-            transform: scale(1.1); /* 稍微放大，提升互動感 */
-        }
+                background-color: rgba(255, 255, 255, 0.2);
+                transform: scale(1.1);
+            }
 
 
 
@@ -298,7 +286,7 @@
 <body>
 
     <header id="toolbar">
-        <h1 class="toolbar-title">畢業紀念冊</h1>
+        <h1>畢業紀念冊</h1>
         <div id="uploadButton" onclick="openUploadFolder()" title="上傳照片">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" viewBox="0 0 24 24">
                 <path d="M19 15v4H5v-4H3v4a2 2 0 002 2h14a2 2 0 002-2v-4z"/>
@@ -306,7 +294,6 @@
             </svg>
         </div>
     </header>
-
 
     
     <div class="top-gallery">
