@@ -525,7 +525,7 @@
             document.getElementById("photoGallery").classList.remove("hidden");
             document.getElementById("backButton").classList.remove("hidden");
         
-            const API_URL = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'image'&key=${API_KEY}&fields=files(id,name)`;
+            const API_URL = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+(mimeType contains 'image/' or mimeType contains 'video/')&key=${API_KEY}&fields=files(id,name,mimeType)`;
         
             fetch(API_URL)
                 .then(response => {
@@ -542,30 +542,58 @@
                         gallery.innerHTML = "<p>這個相簿沒有照片。</p>";
                         return;
                     }
-        
-                    data.files.forEach((file) => {
-                        const imgElement = document.createElement("img");
-                        imgElement.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w300`;
-                        imgElement.alt = file.name;
-                        imgElement.onclick = function () {
-                            openModal(file.id);
+                data.files.forEach((file) => {
+                    let element;
+                    if (file.mimeType.startsWith("image/")) {
+                        element = document.createElement("img");
+                        element.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w300`;
+                        element.onclick = function () {
+                            openModal(file.id, "image");
                         };
-                        gallery.appendChild(imgElement);
-                    });
+                    } else if (file.mimeType.startsWith("video/")) {
+                        element = document.createElement("video");
+                        element.src = `https://drive.google.com/uc?id=${file.id}`;
+                        element.controls = true;
+                        element.width = 300;
+                        element.onclick = function () {
+                            openModal(file.id, "video");
+                        };
+                    }
+                    element.alt = file.name;
+                    gallery.appendChild(element);
+                });
+
+
                 })
                 .catch(error => {
                     console.error("錯誤:", error);
                     document.getElementById("photoGallery").innerHTML = "<p>載入圖片時發生錯誤。</p>";
                 });
         }
-        
-        function openModal(id) {
+
+        function openModal(id, type) {
             const modal = document.getElementById("modal");
             const modalImage = document.getElementById("modalImage");
         
             modal.style.display = "flex";
-            modalImage.src = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`; // 顯示較大解析度
+        
+            if (type === "image") {
+                modalImage.src = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`;
+                modalImage.style.display = "block";
+                modalImage.nextElementSibling?.remove(); // 如果前面放過影片就移除
+            } else if (type === "video") {
+                modalImage.style.display = "none";
+                // 移除原本的影片（避免重複）
+                modal.querySelector("video")?.remove();
+                const video = document.createElement("video");
+                video.src = `https://drive.google.com/uc?id=${id}`;
+                video.controls = true;
+                video.style.maxWidth = "90%";
+                video.style.maxHeight = "90%";
+                modal.appendChild(video);
+            }
         }
+
         
         function closeModal() {
             document.getElementById("modal").style.display = "none";
