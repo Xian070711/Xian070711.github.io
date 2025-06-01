@@ -580,22 +580,25 @@
         
             modal.style.display = "flex";
         
+            // 清除舊影片
+            modal.querySelector("iframe")?.remove();
+            modalImage.style.display = "none";
+        
             if (type === "image") {
                 modalImage.src = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`;
                 modalImage.style.display = "block";
-                modalImage.nextElementSibling?.remove(); // 如果前面放過影片就移除
             } else if (type === "video") {
-                modalImage.style.display = "none";
-                // 移除原本的影片（避免重複）
-                modal.querySelector("video")?.remove();
-                const video = document.createElement("video");
-                video.src = `https://drive.google.com/uc?id=${id}`;
-                video.controls = true;
-                video.style.maxWidth = "90%";
-                video.style.maxHeight = "90%";
-                modal.appendChild(video);
+                const iframe = document.createElement("iframe");
+                iframe.src = `https://drive.google.com/file/d/${id}/preview`;
+                iframe.width = "1000";
+                iframe.height = "600";
+                iframe.allow = "autoplay";
+                iframe.style.border = "none";
+                iframe.style.borderRadius = "10px";
+                modal.appendChild(iframe);
             }
         }
+
 
         
         function closeModal() {
