@@ -588,10 +588,16 @@
         
             document.addEventListener("keydown", function(event) {
             if (event.key === "Escape" || event.key === "Backspace") {
-                goBack(); // 返回首頁 + 關閉 modal
                 closeModal(); // 確保 modal 一定被關掉
             }
         });
+        
+        function closeOnlyModal() {
+            const modal = document.getElementById("modal");
+            if (modal.style.display === "flex") {
+                closeModal();  // 呼叫已經寫好的函式
+            }
+        }
 
 
 
