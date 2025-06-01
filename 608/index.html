@@ -571,6 +571,14 @@
             document.getElementById("modal").style.display = "none";
         }
         
+        function closeOnlyModal() {
+            const modal = document.getElementById("modal");
+            if (modal.style.display === "flex") {
+                closeModal();  // 呼叫已經寫好的函式
+            }
+        }
+
+        
         function goBack() {
             console.log("返回首頁");
         
@@ -592,13 +600,7 @@
             }
         });
         
-        function closeOnlyModal() {
-            const modal = document.getElementById("modal");
-            if (modal.style.display === "flex") {
-                closeModal();  // 呼叫已經寫好的函式
-            }
-        }
-
+        
 
 
 
