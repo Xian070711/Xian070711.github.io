@@ -3,11 +3,693 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>顯示 Google Drive 圖片</title>
+    <title>畢業紀念冊</title>
+    <style>
+        /* 網頁背景 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1f1f1f;
+            color: white;
+            padding-top: 100px; /* 確保工具列不會擋住內容 */
+        }
+        /*最上面空據欄*/
+        #toolbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background-color: #333; /* 深灰色 */
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 25px; 
+            font-weight: bold;
+            transition: all 0.3s ease-in-out;
+            z-index: 1000; /* 確保在最上層 */
+        }
+
+
+        #uploadButton {
+            margin-right: 20px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            transition: background-color 0.2s, transform 0.2s;
+            }
+        
+        #uploadButton:hover {
+                background-color: rgba(255, 255, 255, 0.2);
+                transform: scale(1.1);
+            }
+
+
+
+        /* 主要容器（排版根據螢幕大小變動） */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* 電腦端固定6欄 */
+            gap: 20px;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 50px auto;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: repeat(4, 1fr); /* 平板 4 欄 */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: repeat(3, 1fr); /* 小平板 3 欄 */
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                grid-template-columns: repeat(2, 1fr); /* 手機 2 欄 */
+            }
+        }
+
+        .top-gallery {
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* 間距 */
+            margin-bottom: 30px;
+        }
+        
+        .wide-card {
+            position: relative;
+            width: 400px;
+            height: 200px;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .wide-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .wide-avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .wide-caption {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 25px;
+            font-weight: bold;
+            color: white;
+            letter-spacing: 10px;
+            text-shadow: 
+                -2px -2px 0 black,  
+                2px -2px 0 black,  
+                -2px 2px 0 black,  
+                2px 2px 0 black;
+        }
+        
+        @media (max-width: 768px) {
+            .top-gallery {
+                flex-direction: column;
+                gap: 10px; /* 手機版縮小間距 */
+                align-items: center;
+            }
+        }
+
+    
+        /* 個人卡片 */
+        .person-card {
+            width: 200px;
+            height: 250px;
+            background-color: #3a3a3a; /* 深灰色 */
+            color: white; /* 讓文字變白色 */
+            border: 1px solid #5a5a5a; /* 再加一點細細的外框 */
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            padding-top: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: relative;
+        }
+
+        .person-card {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        
+        .person-card:hover {
+            transform: translateY(-5px); /* 懸停時微微上移 */
+            box-shadow: 0px 5px 15px rgba(255, 255, 255, 0.2); /* 淡白色光暈 */
+        }
+
+
+        /* 大頭貼（圓形，修改圓心位置） */
+        .avatar {
+            width: 225px;  /* 放大圖片本身 */
+            height: 225px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: top;
+            clip-path: circle(75px at center); /* 保持圓形 */
+            position: absolute;
+            top: 0px; /* 調整 Y 軸位置，讓圓形回到正確位置 */
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+
+
+
+
+        /* 座號與姓名 */
+        .info {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 25px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        /* 響應式設計，當螢幕小於600px時，每行顯示2個 */
+        @media (max-width: 600px) {
+            .container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* 照片牆 */
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .gallery img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.1);
+        }
+
+        /* 模態視窗（放大圖片） */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+
+        /* 返回箭頭 */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 50px;  /* 設定固定寬度 */
+            height: 50px; /* 設定固定高度，確保是圓形 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+            z-index: 1001;
+        }
+
+        .back-button:hover {
+            transform: scale(1.1);
+        }
+
+        /* 隱藏照片牆 */
+        .hidden {
+            display: none;
+        }
+
+        /* 關閉模態視窗的叉叉 */
+       .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 50px;  /* 固定寬度 */
+            height: 50px; /* 固定高度，確保是圓形 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+            z-index: 1002;
+        }
+
+
+        .close-button:hover {
+            background-color: rgba(255, 0, 0, 0.7);
+        }
+
+
+
+    </style>
 </head>
 <body>
 
-    <h1>我的 Google Drive 照片</h1>
-    <img src="https://drive.google.com/thumbnail&id=1ANsEZOMqpkU623w0TXCURR6VjeprnnCc" width="300">
+    <header id="toolbar">
+        <h1>畢業紀念冊</h1>
+        <div id="uploadButton" onclick="openUploadFolder()" title="上傳照片">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" viewBox="0 0 24 24">
+                <path d="M19 15v4H5v-4H3v4a2 2 0 002 2h14a2 2 0 002-2v-4z"/>
+                <path d="M11 15h2V9h3l-4-5-4 5h3z"/>
+            </svg>
+        </div>
+    </header>
+
+    
+    <div class="top-gallery">
+        <!-- 合照框框 -->
+        <div class="wide-card" onclick="openAlbum('1qIBrFrwmVm3LG3Sqs4yaMQbB8OhSjm-N')">
+            <img class="wide-avatar" src="https://drive.google.com/thumbnail?id=1gHByTIfB9nWLf8GHqeSNb0HYMt2GT6po&sz=w400" alt="合照">
+            <div class="wide-caption">合照</div>
+        </div>
+    
+        <!-- 老師們框框 -->
+        <div class="wide-card" onclick="openAlbum('1--Gt5uMTZI0iXaxLnn3j3n4dVnKJx-68')">
+            <img class="wide-avatar" src="https://drive.google.com/thumbnail?id=1jnCc0RtIHJ2gBHwScac2_RpV3fzKEJUO&sz=w400" alt="老師們">
+            <div class="wide-caption">老師們</div>
+        </div>
+    </div>
+   
+
+    <div class="container" id="personContainer">
+        <!-- 第一排 -->
+        <div class="person-card" onclick="openAlbum('1z6QM41ku9n3fpRhfbU5f0razulsuVYGd')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1yXdxy9NkwSGWWvZ2nte1zrTL8ZG7k5iB&sz=w200" alt="學生01">
+            <div class="info">01 呂俞潔</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1lT4TJVQi5I8-27qHxO998Tj1yDG7TVD3')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1a3MZYR5cnrZsPktsLdiv8n1A10fD96fT&sz=w200" alt="學生02">
+            <div class="info">02 李其宣</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1iaKV6Yh-O6IpFXUo25hgSqDAXR7TDj1o')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1zqlDhDBH11VK8G6_6MvupeoPBOhaOqQl&sz=w200" alt="學生03">
+            <div class="info">03 林巧婕</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1SPM35uSbLmZdndyg4th-D1FpJA--C7oQ')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1ljFS1UKpAfiCOKPukuIQm9lwhhSe-9mo&sz=w200" alt="學生04">
+            <div class="info">04 紀妙璇</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1CVOmYHqVcTpczcsgvgDbepvglxdemtF-')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1kSQF2EIsWeNp3v6HLxvMeXp_oaedCfys&sz=w200" alt="學生07">
+            <div class="info">07 張硯鈞</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1V8nd1V29e6vpaFPaYxd4tz88CiW6y7f_')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1S1Jz7DQ5-0RGZm4zgfuOlszlBvUUOmo2&sz=w200" alt="學生08">
+            <div class="info">08 張薰云</div>
+        </div>
+
+        <!-- 第二排 -->
+        <div class="person-card" onclick="openAlbum('1-muanCMbVYQPERn6boReFWw3bzsZVEhX')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1hQ06_bycw5z2lL5LaKyz5vbt3XiuUFTF&sz=w200" alt="學生09">
+            <div class="info">09 陳怡筠</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('17sDIogKH-1OVuKIVQDKSoTsy6KMGsm4O')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1sAT4hig4FOcRvq0H8o7qUsyjfRoFXAXT&sz=w200" alt="學生10">
+            <div class="info">10 陳亭希</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1E06G4Z1FPOF66G97cnw97ivMkX0pg8xO')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=12To6YApOqBDESuFNTCmzGf4RsIDrj7w6&sz=w200" alt="學生11">
+            <div class="info">11 陳品甄</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1YXJH3zbUZigvYNieSFO6_XM4iVKOxgit')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=14QmXurBKx_T1fajvvLi7fuk65iRCAlGx&sz=w200" alt="學生12">
+            <div class="info">12 陳姿臻</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1k5bE3mEnccVi1QpwzY3ou24hEQdPYXkp')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1XY1TbeGT891bCHyQZhUoqTWHfD92DD2h&sz=w200" alt="學生13">
+            <div class="info">13 陳宥蓉</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('11Z2BlE99cfGtFTVR-9STnoTKc4tffQSl')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1kcKIiKOgEz1zGPTSI_Jv32a5EEK09E59&sz=w200" alt="學生14">
+            <div class="info">14 陳湘湄</div>
+        </div>
+        
+        <!-- 第三排 -->
+        <div class="person-card" onclick="openAlbum('1_OVquYfuKjfqTMZ-2Y4Beuq3jgOgfvMi')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1FqbKAJDrZJwye-ws0rKaSJewV3se2Phl&sz=w200" alt="學生15">
+            <div class="info">15 黃紹恩</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1f_3vgA9iA9DwzeZvT7CWQiqN_5TbPD8f')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1IUJP8bFn7ebWyJG14PaGo73G3UDNzEWX&sz=w200" alt="學生16">
+            <div class="info">16 廖乃瑩</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1-8VmaEOsCOAC7yjIs95xtvCTWQZ9vkKL')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1gvHAeovA572sOQpdxW0KDV0LyoTDhIRV&sz=w200" alt="學生17">
+            <div class="info">17 劉安倢</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1Scqfoq13-EWhmRAzdd15NsrgLyn1MNS9')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1xoSGtoPlaTj-GdA3eQ9mHju7q4L7NLBB&sz=w200" alt="學生18">
+            <div class="info">18 蔡安淇</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1WL0iNCP9M4xmKJvLQeU6XZ18krwTVL11')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1ZLfPJ1La6st797J6c8BRbydBPyJTDMXS&sz=w200" alt="學生19">
+            <div class="info">19 蔣茹安</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1hFaRTteDAAmGHq0BujcUbFEONegV8hpy')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1kR3gM7IEI67svsIKjNudUC-YKjMM5Gp9&sz=w200" alt="學生20">
+            <div class="info">20 賴昱彣</div>
+        </div>
+
+        <!-- 第四排 -->
+        <div class="person-card" onclick="openAlbum('1_Klg0Pi7UOfGwpzy8YZ4gfVQFW6-MiVq')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1Adtju8vkmzQte5y4tI-xThFEEPwe6SWz&sz=w200" alt="學生21">
+            <div class="info">21 賴儀庭</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1g3K25HNX3-xfDYyxMWRWfxVMcfvAUtNa')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1I1q3gEkuEk4iDVwOKRgqviInH0alTcDi&sz=w200" alt="學生22">
+            <div class="info">22 薛巧函</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1lEoR_fGZXVSye-Vthr5gSNKjjc44J0sx')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1-49wV88xmIwHPuk3mzmsHGfWUpFuVwB7&sz=w200" alt="學生23">
+            <div class="info">23 王宣皓</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1DmLQ3N9vsapyR8drfsNY9g11Sa49OGVb')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1GxnwAzsztzQuLw3BKy55XvWCyi6WR-0K&sz=w200" alt="學生24">
+            <div class="info">24 田力行 </div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1aB7eh6t_e8lV9bBUK-jZMvU7w6vwp2Wm')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1FgWPK3rFNEbwO-B9aeKOG-NE5R1yswvO&sz=w200" alt="學生25">
+            <div class="info">25 吳承楷</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1RGpqZ0PO6cwm2XDYjrCnuiWkPKiXJVlQ')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1BHcZn19_8hh1bcjTeRNzJe7OdbzGdUhO&sz=w200" alt="學生26">
+            <div class="info">26 吳柏楙</div>
+        </div>
+
+        <!-- 第五排 -->
+        <div class="person-card" onclick="openAlbum('1l-thpLtyBxVK-NCFEnHJGop8ukNID5ru')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1_WCgYL26spP2D8Gl-HLlPQshcpB0VWrA&sz=w200" alt="學生27">
+            <div class="info">27 宋聖筑</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1Am_H0uuXNjp0in_I-HUZJ4qUbONcxFKz')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1u4AQ0xbpg_Xpxf4VbSmVME6fgl-EBhHl&sz=w200" alt="學生28">
+            <div class="info">28 周宥勳</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1Mzdbbq8RL0NtF_PXjtgcFenkRnaD9eLu')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1dC2Di3S0Kxo1iCBj6dd_aDcZL4jumUAp&sz=w200" alt="學生29">
+            <div class="info">29 林凡凱 </div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('12mEI6Ux_2gTukmf7XmQPJ2610z0lDoUc')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1jZyzIN4hTN1anwuuHry446Vft_hdWtp6&sz=w200" alt="學生30">
+            <div class="info">30 林威志</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1CVOmYHqVcTpczcsgvgDbepvglxdemtF-')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1S_ZgwltXnbVaBNyy7jVHKkcwcRVniUBf&sz=w200" alt="學生31">
+            <div class="info">31 胡秉昕</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1D3GK5hIhnzuVHd-vi_tPJ_AdPdhhwB_P')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1qcKu_1R7qDzihik3nLoPOJRfXwLSEFNH&sz=w200" alt="學生32">
+            <div class="info">32 連國楨</div>
+        </div>
+
+        <!-- 第六排 -->
+        <div class="person-card" onclick="openAlbum('1uZxdUYyK6H41QyQeemP78IW2r6-tPmXU')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1BDDJLi1BsYa7lczWe5iGvZFQ7bcgUMjy&sz=w200" alt="學生33">
+            <div class="info">33 廖研皓</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1NO_ER47mXslo5qrMzh1BW9MZ0CeN2SkI')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1I8rRxvx7hB-KMKAMpF3OQfmeUdpQ3Sv9&sz=w200" alt="學生34">
+            <div class="info">34 廖振賢</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('11UEuCxGfgTAFNPxg1OzYbcWemXeD37Dc')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1NlQnbWJfyMFxw_epoQw4Jlj1VSWb1kZt&sz=w200" alt="學生35">
+            <div class="info">35 趙昱凱</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1_OPkeyFbEo_l5RCQgfKoZvImpAXrKFuM')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=18VJXjmL1oSyZpPCNfCpxvwqeb52A-nRf&sz=w200" alt="學生36">
+            <div class="info">36 鄭皓元</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1Uk-Cytv_qjelZSzg9UajylDj6ZJIpPRc')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1cBAJDmcJRZsm-UKuS96pCYK3LsfIoYTM&sz=w200" alt="學生37">
+            <div class="info">37 魏均叡</div>
+        </div>
+
+        <div class="person-card" onclick="openAlbum('1ljcfzuHufDKM4PcnhENRbbW86q8WQOhA')">
+            <img class="avatar" src="https://drive.google.com/thumbnail?id=1udTFq4N168UBo7emSJUUK2qi5leLbMVb&sz=w200" alt="學生38">
+            <div class="info">38 魏均翰</div>
+        </div>
+    </div>
+
+    <!-- 照片牆 -->
+    <div id="photoGallery" class="gallery hidden"></div>
+
+
+    <!-- 返回箭頭 -->
+    <div id="backButton" class="back-button hidden" onclick="handleBackClick()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="white">
+            <path d="M15.54 3.54a1.5 1.5 0 0 1 0 2.12L9.21 12l6.33 6.33a1.5 1.5 0 0 1-2.12 2.12l-7.5-7.5a1.5 1.5 0 0 1 0-2.12l7.5-7.5a1.5 1.5 0 0 1 2.12 0z"/>
+        </svg>
+    </div>
+
+    <!-- 模態視窗（放大圖片） -->
+    <div id="modal" class="modal" onclick="closeModal()">
+        <img id="modalImage">
+    </div>
+    
+
+    <script>
+
+        
+        function openUploadFolder() {
+            window.open("https://drive.google.com/drive/folders/1kiZCl4iy-ebA84tf5oGaIuvuvQWHUkz5", "_blank");
+        }
+        
+
+        window.addEventListener("scroll", function () {
+            let toolbar = document.getElementById("toolbar");
+            if (window.scrollY > 50) { // 滾動超過 50px
+                toolbar.style.height = "40px";  // 縮小高度
+                toolbar.style.backgroundColor = "rgba(51, 51, 51, 0.7)";  // 變透明一點
+                toolbar.style.fontSize = "18px"; // 字體變小
+            } else {
+                toolbar.style.height = "80px";  // 恢復原大小
+                toolbar.style.backgroundColor = "#333";  // 恢復深灰色
+                toolbar.style.fontSize = "25px"; // 字體恢復
+            }
+        });
+
+
+        
+        const API_KEY = "AIzaSyD3Q3lspfglPiRXPd1ksROciLdYLD84-y0"; // 你的 API Key
+        
+        function openAlbum(folderId) {
+            console.log("開啟相簿，ID:", folderId);
+        
+            // 隱藏個人卡片區域 & 合照、老師區域
+            document.getElementById("personContainer").classList.add("hidden");
+            document.querySelector(".top-gallery").classList.add("hidden");
+        
+            // 顯示照片牆和返回按鈕
+            document.getElementById("photoGallery").classList.remove("hidden");
+            document.getElementById("backButton").classList.remove("hidden");
+        
+            const API_URL = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+(mimeType contains 'image/' or mimeType contains 'video/')&key=${API_KEY}&fields=files(id,name,mimeType)`;
+        
+            fetch(API_URL)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const gallery = document.getElementById("photoGallery");
+                    gallery.innerHTML = ""; // 清空舊圖片
+        
+                    if (!data.files || data.files.length === 0) {
+                        gallery.innerHTML = "<p>這個相簿沒有照片。</p>";
+                        return;
+                    }
+                data.files.forEach((file) => {
+                    let element;
+                    if (file.mimeType.startsWith("image/")) {
+                        element = document.createElement("img");
+                        element.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w300`;
+                        element.onclick = function () {
+                            openModal(file.id, "image");
+                        };
+                    } else if (file.mimeType.startsWith("video/")) {
+                        element = document.createElement("img");
+                        element.src = `https://drive.google.com/thumbnail?id=${file.id}&sz=w300`;
+                        element.alt = file.name;
+                        element.style.objectFit = "cover";
+                        element.style.width = "150px";
+                        element.style.height = "150px";
+                        element.onclick = function () {
+                            openModal(file.id, "video");
+                        };
+                    }
+
+                    element.alt = file.name;
+                    gallery.appendChild(element);
+                });
+
+
+                })
+                .catch(error => {
+                    console.error("錯誤:", error);
+                    document.getElementById("photoGallery").innerHTML = "<p>載入圖片時發生錯誤。</p>";
+                });
+        }
+
+        function openModal(id, type) {
+            const modal = document.getElementById("modal");
+            const modalImage = document.getElementById("modalImage");
+        
+            modal.style.display = "flex";
+        
+            // 清除舊影片
+            modal.querySelector("iframe")?.remove();
+            modalImage.style.display = "none";
+        
+            if (type === "image") {
+                modalImage.src = `https://drive.google.com/thumbnail?id=${id}&sz=w1000`;
+                modalImage.style.display = "block";
+            } else if (type === "video") {
+                const iframe = document.createElement("iframe");
+                iframe.src = `https://drive.google.com/file/d/${id}/preview`;
+                iframe.width = "1000";
+                iframe.height = "600";
+                iframe.allow = "autoplay";
+                iframe.style.border = "none";
+                iframe.style.borderRadius = "10px";
+                modal.appendChild(iframe);
+            }
+        }
+
+
+        
+        function closeModal() {
+            const modal = document.getElementById("modal");
+            const modalImage = document.getElementById("modalImage");
+        
+            modal.style.display = "none";
+            modalImage.src = "";
+            modalImage.style.display = "none";
+        
+            // 移除 iframe（避免影片繼續播放）
+            const iframe = modal.querySelector("iframe");
+            if (iframe) {
+                iframe.remove();
+            }
+        }
+
+        
+        function closeOnlyModal() {
+            const modal = document.getElementById("modal");
+            if (modal.style.display === "flex") {
+                closeModal();  // 呼叫已經寫好的函式
+            }
+        }
+
+        function handleBackClick() {
+            const modal = document.getElementById("modal");
+            if (modal.style.display === "flex") {
+                closeModal(); // 如果正在看放大圖片，就只關掉它
+            } else {
+                goBack(); // 否則就是從相簿返回首頁
+            }
+        }
+
+
+        
+        function goBack() {
+            console.log("返回首頁");
+        
+            // 顯示個人卡片區域 & 合照、老師區域
+            document.getElementById("personContainer").classList.remove("hidden");
+            document.querySelector(".top-gallery").classList.remove("hidden");
+        
+            // 隱藏照片牆與返回按鈕
+            document.getElementById("photoGallery").classList.add("hidden");
+            document.getElementById("backButton").classList.add("hidden");
+
+            // 關閉 modal（放大圖片）
+            closeModal();
+        }
+        
+            document.addEventListener("keydown", function(event) {
+            if (event.key === "Escape" || event.key === "Backspace") {
+                  handleBackClick();
+            }
+        });
+        
+
+        
+
+
+
+        
+    </script>
+
 </body>
 </html>
